@@ -28,6 +28,7 @@ class Cron extends CI_Controller {
 		$schedule['backupDatabase']		= "0 /12 * * *";
 		$schedule['backupApplications']	= "0 0 * * *";
 		$schedule['backupCodeIgniterCustomScripts']	= "0 0 * * *";
+		$schedule['backupRotator'] = "* * * * *";
 		$schedule['checkPbxRecordings'] = "* * * * *";
 		$schedule['parseEmail']			= "* * * * *";
 		
