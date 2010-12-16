@@ -31,7 +31,7 @@
 		$feeds[] = 'http://feeds.feedburner.com/nettuts';
 		$feeds[] = 'http://feeds.feedburner.com/psdtuts';
 		$feeds[] = 'http://feeds.feedburner.com/phototuts';
-		$feeds[] = 'http://feeds.feedburner.com/vitaminmasterfeed';
+		//$feeds[] = 'http://feeds.feedburner.com/vitaminmasterfeed';
 		$feeds[] = 'http://feeds.feedburner.com/ajaxian';
 		$feeds[] = 'http://feeds.feedburner.com/SmashingMagazine';
 		$feeds[] = 'http://www.photographerswhoblog.com/feed/';
