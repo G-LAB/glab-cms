@@ -7,8 +7,6 @@ class _prototype extends CI_Controller {
 		
 		// Console Menu
 		$this->cmenu[] = array('url'=>'relative_path', 'text'=>'link_text', 'attr'=>'class=""', 'count'=>0);
-		
-		// Construct
 	}
 	
 	function index () {
