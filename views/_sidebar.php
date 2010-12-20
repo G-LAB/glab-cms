@@ -60,7 +60,7 @@ $twitter['count'] = 1;
 $twitter = json_decode(Feed_Request('http://api.twitter.com/1/statuses/user_timeline.json',$twitter)); 
 
 ?>
-<?php if (is_array($twitter)) : ?>
+<?php if (is_array($twitter) && count($twitter) > 0) : ?>
 <blockquote id="twitter" cite="http://twitter.com/<?=$twitter[0]->user->screen_name?>/status/<?=$twitter[0]->id?>">
 	<p><?=parse_tweet($twitter[0]->text)?></p>
 </blockquote>
