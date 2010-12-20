@@ -11,7 +11,7 @@
 |	http://example.com/
 |
 */
-$config['base_url']	= "https://glabstudios.com/backend/";
+$config['base_url']	= "http://".$_SERVER['SERVER_NAME']."/backend/";
 
 /*
 |--------------------------------------------------------------------------
