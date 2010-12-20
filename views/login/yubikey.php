@@ -40,7 +40,7 @@
 			<h2 style="margin-top: 30px; margin-bottom: 40px; font-size: 20px">
 				Please Wait, Your Login is Being Processed.
 			</h2>
-			<img src="/images/global/progressbar.gif" width="50%"/>
+			<img src="<?=assets_url()?>images/global/progressbar.gif" width="50%"/>
 		</div>
 	</div>
 </div>
