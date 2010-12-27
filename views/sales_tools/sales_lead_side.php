@@ -10,7 +10,7 @@
 	<h2>Sales Lead Response Time</h2>
 	<ul class="stats">
 		<li>
-			<span><?=$stats['first']?></span>
+			<span><?=number_format($stats['first'])?></span>
 			<span>
 				Hours to first action.<br/>
 				<strong>Target:</strong> 48 Hours
