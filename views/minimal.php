@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-<title>G-LAB :: Customer Management System</title>
+<title>G LAB (cms)</title>
 <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/yui/2.8.0r4/build/reset-fonts/reset-fonts.css"/>
 <link rel="stylesheet" type="text/css" href="<?=assets_url()?>styles/jquery/jquery-ui-1.7.2.custom.css" />
 <link rel="stylesheet" type="text/css" href="<?=assets_url()?>styles/global.css"/>
 <link rel="stylesheet" type="text/css" href="<?=assets_url()?>styles/backend.css"/>
-<script src="https://www.google.com/jsapi"></script>
-<script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
   // Load jQuery
   google.load("jquery", "1");
 </script>
