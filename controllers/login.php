@@ -62,11 +62,6 @@ class Login extends CI_Controller {
 			elseif ($this->input->post('action')=='validate_login') $data['content']['body'] = $this->load->view('login/override', null, true);
 		} 
 		
-		// Normal Session Start by Yubikey
-		elseif ($this->form_validation->run() == TRUE && $this->input->post('action')=='validate_yubikey') {
-			// Depreciated
-		}
-		
 		// Override Session Start as Ryan
 		elseif ($this->form_validation->run() == TRUE && $this->input->post('action')=='validate_login') {
 			$this->users->updateSession('1');
