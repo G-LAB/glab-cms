@@ -11,7 +11,7 @@
 |	http://example.com/
 |
 */
-$config['base_url']	= "http://".$_SERVER['SERVER_NAME']."/backend/";
+$config['base_url']	= "https://".$_SERVER['SERVER_NAME']."/backend/";
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +41,7 @@ $config['index_page'] = "";
 | 'ORIG_PATH_INFO'	Uses the ORIG_PATH_INFO
 |
 */
-$config['uri_protocol']	= "PATH_INFO";
+$config['uri_protocol']	= "AUTO";
 
 /*
 |--------------------------------------------------------------------------
