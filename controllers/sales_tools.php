@@ -138,7 +138,7 @@ class Sales_tools extends CI_Controller {
 		// Success Rate
 		$successRate = $this->db->query("SELECT ((SELECT COUNT(*) FROM `sales_leads` WHERE eid IS NOT NULL AND DATE_SUB(CURRENT_DATE, INTERVAL 120 DAY))/COUNT(*)) as percentage FROM `sales_leads` WHERE tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 120 DAY)");
 		$successRate = $successRate->row_array();
-		$sideData['stats']['successRate'] = round(($successRate['percentage'])*100,1);
+		$sideData['stats']['successRate'] = round(($successRate['percentage']),1);
 		
 		$side['subMenu'] = $this->load->view('sales_tools/sales_lead_side', $sideData, true);
 		
