@@ -39,7 +39,7 @@
 		
 		
 		libxml_use_internal_errors(TRUE);
-		foreach ($feeds as $fid=>$feed) $rss[$fid] = simplexml_load_string(getFeed($feed));
+		foreach ($feeds as $fid=>$feed) $rss[$fid] = simplexml_load_string(Feed_Request($feed));
 	?>
 	<div id="box_rss">
 		<ul>
