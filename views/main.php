@@ -184,6 +184,12 @@
 										<p>Log a new lead for the sales team or follow up on a sales lead.</p>
 									</a>
 								</li>
+								<li id="bar_finance">
+									<a href="<?=site_url('finance')?>">
+										<strong>Finance &amp; Accounting</strong>
+										<p>Get balances, make adjusting entries, print reports.</p>
+									</a>
+								</li>
 							</ul>
 						</div>
 					</div>
@@ -236,10 +242,10 @@
 										<p>View and update agreements and contracts.</p>
 									</a>
 								</li>
-								<li id="bar_finance">
-									<a href="<?=site_url('finance')?>">
-										<strong>Finance &amp; Accounting</strong>
-										<p>Get balances, make adjusting entries, print reports.</p>
+								<li id="bar_version_control">
+									<a href="<?=site_url('version_control')?>">
+										<strong>Version Control</strong>
+										<p>View trees, commits, and download code.</p>
 									</a>
 								</li>
 							</ul>
