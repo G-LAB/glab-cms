@@ -26,16 +26,18 @@
 	<h3>In The News...</h3>
 	<?php 
 		$this->load->helper(array('feed','text'));
-		$feeds[] = 'http://adage.com/rss-feed?section_id=350';
+		$feeds[] = 'http://www.456bereastreet.com/feed.xml';
 		$feeds[] = 'http://feeds.mashable.com/Mashable';
 		$feeds[] = 'http://feeds.feedburner.com/nettuts';
 		$feeds[] = 'http://feeds.feedburner.com/psdtuts';
 		$feeds[] = 'http://feeds.feedburner.com/phototuts';
-		//$feeds[] = 'http://feeds.feedburner.com/vitaminmasterfeed';
+		$feeds[] = 'http://feeds.feedburner.com/webdesigntutsplus';
+		$feeds[] = 'http://feeds.feedburner.com/uxbooth';
 		$feeds[] = 'http://feeds.feedburner.com/ajaxian';
 		$feeds[] = 'http://feeds.feedburner.com/SmashingMagazine';
 		$feeds[] = 'http://www.photographerswhoblog.com/feed/';
 		$feeds[] = 'http://feeds.feedburner.com/PronetAdvertising';
+		$feeds[] = 'http://philsturgeon.co.uk/news/rss/all.rss';
 		
 		
 		libxml_use_internal_errors(TRUE);
