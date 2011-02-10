@@ -104,15 +104,16 @@ class Login extends CI_Controller {
 			// If Key Found, Validate with Yubico
 			} else {
 				$this->load->library('yubikey');
-				$valid = $this->yubikey->validate($otp);
-				$this->form_validation->set_message('validateYubikey', 'Yubico declined key: '.$valid);
 				
-				if ($valid === true) {
+				if ($this->yubikey->validate($otp)) {
 					$this->users->updateSession($user['eid']);
 					$this->event->log('admin_login');
 					redirect('dashboard');
-					return true;
-				} else return false;
+					return TRUE;
+				} else {
+					$this->form_validation->set_message('validateYubikey', 'Yubico declined key: '.$this->yubikey->status);
+					return FALSE;
+				}
 			}
 			
 		}
