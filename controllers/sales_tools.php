@@ -2,6 +2,15 @@
 
 class Sales_tools extends CI_Controller {
 	
+	function __construct() {
+	    parent::__construct();
+	    
+	    $this->cmenu[] = array('url'=>'sales_tools/sales_leads', 'text'=>'Sales Leads');
+	    $this->cmenu[] = array('url'=>'sales_tools/cold_caller_3000', 'text'=>'Cold Caller 3000');
+
+	}
+
+	
 	function index() {
 		redirect('sales_tools/sales_leads');
 	}
@@ -287,6 +296,131 @@ class Sales_tools extends CI_Controller {
 		$this->load->view('main',$data);
 		
 	}
+	
+	function cold_caller_3000 () {
+		
+		// Insert New DB Rows, If Applicable
+		if ($this->input->post('id')) {
+			$this->db->set('yid',$this->input->post('id'));
+			$this->db->insert('sales_cold_calls');
+		}
+		
+		// Prepare Data
+		$start = $this->input->get('start');
+		if ($start == FALSE) $start = 1;
+		$query = $this->input->get('q');
+		$loc = $this->input->get('loc');
+		if ($loc == FALSE) {
+			$this->db->select('zip5');
+			$this->db->limit(1);
+			$this->db->order_by('RAND()');
+			$q = $this->db->get('addrbook');
+			$r = $q->row_array();
+			
+			$loc = $r['zip5'];
+		}
+		
+		// Prepare Request
+		$request['start'] = $start;
+		$request['results'] = 5;
+		$request['appid'] = 'vLWSsN4u';
+		if ($query == FALSE) $request['query'] = '*'; 
+		else $request['query'] = $query; 
+		$request['location'] = $loc;
+		$request['output'] = 'json';
+		
+		// Fetch Data
+		$yahoo_raw = json_decode(Feed_Request('http://local.yahooapis.com/LocalSearchService/V3/localSearch',$request)); //print_r($yahoo_raw);
+		$yahoo = $yahoo_raw->ResultSet->Result;
+		
+		// Prepare List of Yahoo Listing IDs
+		foreach ($yahoo as $location) $yids[] = $location->id;
+		
+		// Get Statuses of Businesses Already Cold Called
+		$dbresults = array();
+		$this->db->where_in('yid',$yids);
+		$db = $this->db->get('sales_cold_calls');
+		$db = $db->result_array();
+		foreach ($db as $dbresult) $status[element('yid',$dbresult)] = $dbresult['status'];
+		
+		foreach ($yahoo as $location) {
+			
+			$result['id'] = $location->id;
+			
+			if (isset($status[$location->id])) $result['dead'] = TRUE;
+			else $result['dead'] = FALSE;
+			
+			$result['name'] = $location->Title;
+			$result['addr'] = $location->Address;
+			$result['city'] = $location->City;
+			$result['state'] = $location->State;
+			$result['phone'] = phone_strip($location->Phone);
+			$result['lat'] = $location->Latitude;
+			$result['long'] = $location->Longitude;
+			$result['url'] = @$location->BusinessUrl;
+			$result['domain'] = domain_filter($result['url']);
+			$result['rating'] = (int) @$location->Rating->AverageRating;
+			$result['dist'] = $location->Distance;
+			$result['map'] = $location->MapUrl;
+			// Concatenate Category List
+			$result['cats'] = null;
+			if ( count(@$location->Categories->Category) > 1 ) {
+				foreach( @$location->Categories->Category as $cat) {
+					$result['cats'] .= $cat->content.', ';
+				}
+				$result['cats'] = substr($result['cats'], 0, -2);
+				
+			} elseif ( count(@$location->Categories->Category) == 1 ) {
+				$result['cats'] = $location->Categories->Category->content;
+			}
+			
+			// Perform WHOIS Lookup
+			if ($result['domain']) {
+				//$this->load->library('whois');
+				//var_dump($this->whois->lookup($result['domain']));
+			}
+			
+			// Send Result Array
+			$results[] = $result;
+		}
+		
+		// GOOGLE MAP
+		// Get Coordinates
+		$coordinates = array();
+		foreach ($results as $result) $coordinates[] = $result['lat'].','.$result['long'];
+		// Get Map URL
+		$map = google_map('300x700',$coordinates);
+		
+		$this->load->library('pagination');
+		
+		$config['base_url'] = site_url('sales_tools/cold_caller_3000').'?q='.urlencode($query).'&loc='.urlencode($loc);
+		$config['page_query_string'] = TRUE;
+		$config['query_string_segment'] = 'start';
+		$config['num_links'] = 5;
+		$config['total_rows'] = $yahoo_raw->ResultSet->totalResultsAvailable;
+		$config['per_page'] = $yahoo_raw->ResultSet->totalResultsReturned; 
+		$config['next_link'] = 'Next &gt;';
+		$config['prev_link'] = '&lt; Previous';
+		$config['last_link'] = '';
+		
+		$this->pagination->initialize($config); 
+		
+		$pagination = $this->pagination->create_links();
+		
+		$console['header'] = 'Results '.number_format($yahoo_raw->ResultSet->firstResultPosition).'-'.number_format($yahoo_raw->ResultSet->totalResultsReturned + $yahoo_raw->ResultSet->firstResultPosition - 1).' of '.number_format($yahoo_raw->ResultSet->totalResultsAvailable);
+		
+		$console['body'] = $this->load->view('sales_tools/cold_call_map', array('data'=>$results, 'map'=>$map, 'loc'=>$loc, 'query'=>$query, 'pagination'=>$pagination), TRUE);
+		
+		$console['footer_lt'] = null;
+		$console['footer_rt'] = $console['header'];
+		
+		$data['content']['body'] = $this->load->view('console', $console, true);
+		$data['content']['side'] = $this->load->view('_sidebar', null, true);
+		
+		$this->load->view('main',$data);
+		//phpinfo();
+	}
+	
 }
 
 ?>
