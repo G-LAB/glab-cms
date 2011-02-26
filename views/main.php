@@ -274,7 +274,7 @@
 		<div id="HUD_Loading">
 			<div id="progress">
 				Loading...
-				<img src="/images/global/progressbar.gif"/>
+				<img src="<?=assets_url()?>images/global/progressbar.gif"/>
 			</div>
 		</div>
 	</div>
