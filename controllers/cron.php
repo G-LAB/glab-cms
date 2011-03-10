@@ -267,7 +267,7 @@ class Cron extends CI_Controller {
 										
 					// Greeting
 					if (isset($entity['name'])) $email['greeting']	= $entity['name'];
-					elseif ( $msg['arrays']['from'][0]['personal'] != null ) $email['greeting'] = $msg['arrays']['from'][0]['personal'];
+					elseif ( isset($msg['arrays']['from'][0]['personal']) ) $email['greeting'] = $msg['arrays']['from'][0]['personal'];
 					else $email['greeting'] = 'Hello';
 					// Tikcet ID
 					if ($success['ticket']) 	$email['tikid']	= tikid_format($ticket['tikid']);
