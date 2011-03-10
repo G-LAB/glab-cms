@@ -2,21 +2,78 @@
 
 class Sales_tools extends CI_Controller {
 	
+	private $sidebar = array();
+	
 	function __construct() {
 	    parent::__construct();
 	    
-	    $this->cmenu[] = array('url'=>'sales_tools/sales_leads', 'text'=>'Sales Leads');
+	    $this->cmenu[] = array('url'=>'sales_tools/qualified_sales_leads', 'text'=>'Qualified Sales Leads');
 	    $this->cmenu[] = array('url'=>'sales_tools/cold_caller_3000', 'text'=>'Cold Caller 3000');
-
+		
+		
+		/*
+			SIDEBAR
+		*/
+		$this->load->library('GoogleGraph');
+		// CHART: Sales Lead Distribution
+		// Fetch Data
+		$graph = $this->db->query('SELECT e.firstName, COUNT(*) as count FROM sales_leads s LEFT JOIN entities e ON s.eidCreated = e.eid WHERE s.tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR) GROUP BY s.eidCreated');
+		$graph = $graph->result_array();
+		// Chart Data
+		foreach ($graph as $row) {
+			$chart['data'][] = $row['count'];
+			$chart['legend'][] = $row['firstName'];
+		}
+		$sum = array_sum($chart['data']);
+		foreach ($graph as $row) $chart['labels'][] = round(($row['count']/$sum)*100).'%';
+		// Generate
+		$graph = new GoogleGraph(); 
+		//Data     
+		$graph->Data->addData($chart['data']);
+		//Graph 
+		$graph->Graph->setType('pie'); 
+		$graph->Graph->setSubtype('3d'); 
+		$graph->Graph->setSize(225, 125);
+		$graph->Graph->setBarSize(20);
+		$graph->Graph->setAxis(array('x','y'));
+		//Labels 
+		$graph->Graph->addPieLabel($chart['labels']); 
+		$graph->Graph->setLegend($chart['legend']); 
+		$graph->Graph->setLegendPosition('b'); 
+		//Lines 
+		$graph->Graph->setLineColors(array('#EC602A', '#0FA6A6', '#5A358C')); 
+		//Output Graph 
+		$this->sidebar['chart'] = $graph->printGraph(FALSE,FALSE);
+		
+		// STAT: Average Time to Resolution
+		$qualified_response_time = $this->db->query("SELECT AVG((UNIX_TIMESTAMP(IFNULL(n.tsCreated,NOW())) - UNIX_TIMESTAMP(l.tsCreated))) as avg FROM `sales_leads` l LEFT JOIN `sales_leads_notes` n ON l.ldid=n.ldid  WHERE l.tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 120 DAY)");
+		$qualified_response_time = $qualified_response_time->row_array();
+		$this->sidebar['stats']['qualified_response_time'] = $qualified_response_time['avg']/60/60;
+		
+		// STAT: Qualified Success Rate
+		$qualified_success_rate = $this->db->query("SELECT ((SELECT COUNT(*) FROM `sales_leads` WHERE eid IS NOT NULL AND DATE_SUB(CURRENT_DATE, INTERVAL 120 DAY))/COUNT(*)) as percentage FROM `sales_leads` WHERE tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 120 DAY)");
+		$qualified_success_rate = $qualified_success_rate->row_array();
+		$this->sidebar['stats']['qualified_success_rate'] = $qualified_success_rate['percentage']/1;
+		
+		// STAT: Count Cold Calls This Week
+		$cold_calls_week = $this->db->query("SELECT SUM(count) as count FROM (SELECT COUNT(*) as count FROM sales_leads WHERE tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 1 WEEK) UNION ALL SELECT COUNT(*) as count FROM sales_cold_calls WHERE tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 1 WEEK)) as data_full");
+		$cold_calls_week = $cold_calls_week->row_array();
+		$this->sidebar['stats']['leads_week'] = $cold_calls_week['count'];
+		
+		// STAT: Count Cold Calls Per Week On Average
+		$cold_calls_avg = $this->db->query("SELECT AVG(count) as avg FROM (SELECT week, SUM(count) as count FROM (SELECT WEEKOFYEAR(tsCreated) as week, COUNT(*) as count FROM sales_leads WHERE tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 120 DAY) GROUP BY WEEKOFYEAR(tsCreated) UNION ALL SELECT WEEKOFYEAR(tsCreated) as week, COUNT(*) as count FROM sales_cold_calls WHERE tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 120 DAY) GROUP BY WEEKOFYEAR(tsCreated)) as data_full GROUP BY week) as data_summary");
+		$cold_calls_avg = $cold_calls_avg->row_array();
+		$this->sidebar['stats']['leads_avg'] = $cold_calls_avg['avg'];
+		
 	}
 
 	
 	function index() {
-		redirect('sales_tools/sales_leads');
+		redirect('sales_tools/cold_caller_3000');
 	}
 	
-	function sales_leads ($start=0) {
-		//echo  $this->input->post('action');
+	function qualified_sales_leads ($start=0) {
+		
 		$this->load->library('form_validation');
 		$this->load->library('pagination');
 		$this->load->helper('snippet');
@@ -35,7 +92,7 @@ class Sales_tools extends CI_Controller {
 			$this->form_validation->set_rules('city', 'City', 'xss_clean');
 			$this->form_validation->set_rules('state', 'State', 'exact_length[2]');
 			$this->form_validation->set_rules('zip5', 'Zip', 'numeric|exact_length[5]');
-			$this->form_validation->set_rules('notes', 'Notes', 'min_length[100]');
+			$this->form_validation->set_rules('notes', 'Notes', 'required|min_length[100]');
 		}
 		
 		$valid = $this->form_validation->run();
@@ -80,8 +137,6 @@ class Sales_tools extends CI_Controller {
 		elseif ($this->input->post('action') == 'add_lead' && !$valid) $hide = FALSE;
 		else $hide = TRUE;
 		
-		//$start = $this->input->get('per_page');
-		
 		// Get Data
 		$this->db->limit(10, $start);
 		$this->db->order_by('ldid','DESC');
@@ -104,53 +159,7 @@ class Sales_tools extends CI_Controller {
 		
 		$this->pagination->initialize($config); 
 		
-		// Google Charts
-		$this->load->helper(array('xml','data'));
-		$this->load->library('GoogleGraph');
-		
-		// CHART: Sales Lead Distribution
-		// Fetch Data
-		$chartLeadDist = $this->db->query('SELECT e.firstName, COUNT(*) as count FROM sales_leads s LEFT JOIN entities e ON s.eidCreated = e.eid WHERE s.tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 1 YEAR) GROUP BY s.eidCreated');
-		$chartLeadDist = $chartLeadDist->result_array();
-		// Chart Data
-		foreach ($chartLeadDist as $row) {
-			$chart['data'][] = $row['count'];
-			$chart['legend'][] = $row['firstName'];
-		}
-		$sum = array_sum($chart['data']);
-		foreach ($chartLeadDist as $row) $chart['labels'][] = round(($row['count']/$sum)*100).'%';
-		// Generate
-		$chartLeadDist = new GoogleGraph(); 
-		//Data     
-		$chartLeadDist->Data->addData($chart['data']);
-		//Graph 
-		$chartLeadDist->Graph->setType('pie'); 
-		$chartLeadDist->Graph->setSubtype('3d'); 
-		$chartLeadDist->Graph->setSize(225, 125);
-		$chartLeadDist->Graph->setBarSize(20);
-		$chartLeadDist->Graph->setAxis(array('x','y'));
-		//Labels 
-		$chartLeadDist->Graph->addPieLabel($chart['labels']); 
-		$chartLeadDist->Graph->setLegend($chart['legend']); 
-		$chartLeadDist->Graph->setLegendPosition('b'); 
-		//Lines 
-		$chartLeadDist->Graph->setLineColors(array('#EC602A', '#0FA6A6', '#5A358C')); 
-		//Output Graph 
-		//$sideData['chart'] = $chartLeadDist->printGraph(FALSE,FALSE);
-		$sideData['chart'] = null;
-		
-		// Average Time to Resolution
-		$responseTimeFirst = $this->db->query("SELECT AVG((UNIX_TIMESTAMP(IFNULL(n.tsCreated,NOW())) - UNIX_TIMESTAMP(l.tsCreated))) as avg FROM `sales_leads` l LEFT JOIN `sales_leads_notes` n ON l.ldid=n.ldid  WHERE l.tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 120 DAY)");
-		$responseTimeFirst = $responseTimeFirst->row_array();
-		$sideData['stats']['first'] = round($responseTimeFirst['avg']/60/60);
-		
-		// Success Rate
-		$successRate = $this->db->query("SELECT ((SELECT COUNT(*) FROM `sales_leads` WHERE eid IS NOT NULL AND DATE_SUB(CURRENT_DATE, INTERVAL 120 DAY))/COUNT(*)) as percentage FROM `sales_leads` WHERE tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 120 DAY)");
-		$successRate = $successRate->row_array();
-		$sideData['stats']['successRate'] = round(($successRate['percentage']),1);
-		
-		$side['subMenu'] = $this->load->view('sales_tools/sales_lead_side', $sideData, true);
-		
+		$side['subMenu'] = $this->load->view('sales_tools/sales_lead_side', $this->sidebar, true);
 		
 		$console['header'] = 'Showing '.($start + 1).' - '.($start + $count_this).' of '.$count_total;
 	
@@ -299,6 +308,8 @@ class Sales_tools extends CI_Controller {
 	
 	function cold_caller_3000 () {
 		
+		$this->load->helper('text');
+		
 		// Insert New DB Rows, If Applicable
 		if ($this->input->post('id')) {
 			$this->db->set('yid',$this->input->post('id'));
@@ -308,7 +319,9 @@ class Sales_tools extends CI_Controller {
 		// Prepare Data
 		$start = $this->input->get('start');
 		if ($start == FALSE) $start = 1;
+		
 		$query = $this->input->get('q');
+		
 		$loc = $this->input->get('loc');
 		if ($loc == FALSE) {
 			$this->db->select('zip5');
@@ -324,65 +337,71 @@ class Sales_tools extends CI_Controller {
 		$request['start'] = $start;
 		$request['results'] = 5;
 		$request['appid'] = 'vLWSsN4u';
-		if ($query == FALSE) $request['query'] = '*'; 
+		if ($query == FALSE || strtolower($query) == 'everything') $request['query'] = '*'; 
 		else $request['query'] = $query; 
 		$request['location'] = $loc;
 		$request['output'] = 'json';
 		
 		// Fetch Data
-		$yahoo_raw = json_decode(Feed_Request('http://local.yahooapis.com/LocalSearchService/V3/localSearch',$request)); //print_r($yahoo_raw);
-		$yahoo = $yahoo_raw->ResultSet->Result;
+		$yahoo_raw = json_decode(Feed_Request('http://local.yahooapis.com/LocalSearchService/V3/localSearch',$request)); 
 		
-		// Prepare List of Yahoo Listing IDs
-		foreach ($yahoo as $location) $yids[] = $location->id;
+		$results = array();		
+		if ($yahoo_raw->ResultSet->totalResultsReturned > 0) {
 		
-		// Get Statuses of Businesses Already Cold Called
-		$dbresults = array();
-		$this->db->where_in('yid',$yids);
-		$db = $this->db->get('sales_cold_calls');
-		$db = $db->result_array();
-		foreach ($db as $dbresult) $status[element('yid',$dbresult)] = $dbresult['status'];
-		
-		foreach ($yahoo as $location) {
+			$yahoo = $yahoo_raw->ResultSet->Result;
+
+			// Prepare List of Yahoo Listing IDs
+			foreach ($yahoo as $location) $yids[] = $location->id;
 			
-			$result['id'] = $location->id;
+			// Get Statuses of Businesses Already Cold Called
+			$dbresults = array();
+			$this->db->where_in('yid',$yids);
+			$db = $this->db->get('sales_cold_calls');
+			$db = $db->result_array();
+			foreach ($db as $dbresult) $status[element('yid',$dbresult)] = $dbresult['status'];
 			
-			if (isset($status[$location->id])) $result['dead'] = TRUE;
-			else $result['dead'] = FALSE;
-			
-			$result['name'] = $location->Title;
-			$result['addr'] = $location->Address;
-			$result['city'] = $location->City;
-			$result['state'] = $location->State;
-			$result['phone'] = phone_strip($location->Phone);
-			$result['lat'] = $location->Latitude;
-			$result['long'] = $location->Longitude;
-			$result['url'] = @$location->BusinessUrl;
-			$result['domain'] = domain_filter($result['url']);
-			$result['rating'] = (int) @$location->Rating->AverageRating;
-			$result['dist'] = $location->Distance;
-			$result['map'] = $location->MapUrl;
-			// Concatenate Category List
-			$result['cats'] = null;
-			if ( count(@$location->Categories->Category) > 1 ) {
-				foreach( @$location->Categories->Category as $cat) {
-					$result['cats'] .= $cat->content.', ';
-				}
-				$result['cats'] = substr($result['cats'], 0, -2);
+			foreach ($yahoo as $location) {
 				
-			} elseif ( count(@$location->Categories->Category) == 1 ) {
-				$result['cats'] = $location->Categories->Category->content;
-			}
-			
-			// Perform WHOIS Lookup
-			if ($result['domain']) {
-				//$this->load->library('whois');
-				//var_dump($this->whois->lookup($result['domain']));
-			}
-			
-			// Send Result Array
-			$results[] = $result;
-		}
+				$result['id'] = $location->id;
+				
+				if (isset($status[$location->id])) $result['dead'] = TRUE;
+				else $result['dead'] = FALSE;
+				
+				$result['name'] = $location->Title;
+				$result['addr'] = $location->Address;
+				$result['city'] = $location->City;
+				$result['state'] = $location->State;
+				$result['phone'] = phone_strip($location->Phone);
+				$result['lat'] = $location->Latitude;
+				$result['long'] = $location->Longitude;
+				$result['url'] = @$location->BusinessUrl;
+				$result['domain'] = domain_filter($result['url']);
+				$result['rating'] = (int) @$location->Rating->AverageRating;
+				$result['dist'] = $location->Distance;
+				$result['map'] = $location->MapUrl;
+				// Concatenate Category List
+				$result['cats'] = null;
+				if ( count(@$location->Categories->Category) > 1 ) {
+					foreach( @$location->Categories->Category as $cat) {
+						$result['cats'] .= $cat->content.', ';
+					}
+					$result['cats'] = substr($result['cats'], 0, -2);
+					
+				} elseif ( count(@$location->Categories->Category) == 1 ) {
+					$result['cats'] = $location->Categories->Category->content;
+				}
+				
+				// Perform WHOIS Lookup
+				if ($result['domain']) {
+					//$this->load->library('whois');
+					//var_dump($this->whois->lookup($result['domain']));
+				}
+				
+				// Send Result Array
+				$results[] = $result;
+				
+			} //foreach
+		} //if
 		
 		// GOOGLE MAP
 		// Get Coordinates
@@ -396,16 +415,17 @@ class Sales_tools extends CI_Controller {
 		$config['base_url'] = site_url('sales_tools/cold_caller_3000').'?q='.urlencode($query).'&loc='.urlencode($loc);
 		$config['page_query_string'] = TRUE;
 		$config['query_string_segment'] = 'start';
-		$config['num_links'] = 5;
+		$config['num_links'] = 3;
 		$config['total_rows'] = $yahoo_raw->ResultSet->totalResultsAvailable;
 		$config['per_page'] = $yahoo_raw->ResultSet->totalResultsReturned; 
-		$config['next_link'] = 'Next &gt;';
-		$config['prev_link'] = '&lt; Previous';
-		$config['last_link'] = '';
+		$config['next_link'] = 'Next';
+		$config['prev_link'] = 'Previous';
 		
 		$this->pagination->initialize($config); 
 		
 		$pagination = $this->pagination->create_links();
+		
+		$side['subMenu'] = $this->load->view('sales_tools/sales_lead_side', $this->sidebar, true);
 		
 		$console['header'] = 'Results '.number_format($yahoo_raw->ResultSet->firstResultPosition).'-'.number_format($yahoo_raw->ResultSet->totalResultsReturned + $yahoo_raw->ResultSet->firstResultPosition - 1).' of '.number_format($yahoo_raw->ResultSet->totalResultsAvailable);
 		
@@ -415,7 +435,7 @@ class Sales_tools extends CI_Controller {
 		$console['footer_rt'] = $console['header'];
 		
 		$data['content']['body'] = $this->load->view('console', $console, true);
-		$data['content']['side'] = $this->load->view('_sidebar', null, true);
+		$data['content']['side'] = $this->load->view('_sidebar', $side, true);
 		
 		$this->load->view('main',$data);
 		//phpinfo();

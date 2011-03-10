@@ -20,6 +20,8 @@
 <script type="text/javascript" src="<?=assets_url()?>js/jquery.AutoEllipsis.js"></script>
 <script type="text/javascript" src="<?=assets_url()?>js/autoresize.jquery.min.js"></script>
 <script type="text/javascript" src="<?=assets_url()?>js/tiny_mce/jquery.tinymce.js"></script>
+<script type="text/javascript" src="<?=assets_url()?>js/jquery.qtip.min.js"></script>
+<script type="text/javascript" src="<?=assets_url()?>js/jquery.placeholder.js"></script>
 
 <?=$this->header->get()?>
 
@@ -27,6 +29,24 @@
 	// Hide Loading Message
 	$(document).ready(function() {
 	  $('#HUD_Loading').hide();
+	  var tipTemplate = {
+	     show: 'mouseover',
+	     hide: 'mouseout',
+	     position: { corner: { tooltip: 'topMiddle', target: 'bottomMiddle' } },
+	     style: {
+	       border: {
+	          width: 1,
+	          radius: 5,
+	          color: '#c3c3c3'
+	       },
+	       textAlign: 'center',
+	       tip: true
+	     }
+	  };
+	  $('.tip').qtip( $.extend(true, {}, tipTemplate, {
+	     // No Options, Use Content From Title Attribute
+	  }));
+	  $('input').placeholder();
 	  $(".rtrim").addClass("nowrap").autoEllipsis();
 	  $(".buttonBar").after('<span class="clear"></div>');
 	  $(".buttonBar .button").addClass("ui-corner-all");
@@ -39,7 +59,10 @@
 	  			'After you answer you will be connected to ' + $(this).html() + '.' );
 	  	var num = $(this).html();
 	  	$.get('<?=site_url('pbx/call')?>/' + num);
-	  });
+	  }).qtip( $.extend(true, {}, tipTemplate, {
+	     content: 'Click-to-Call',
+	     position: { corner: { tooltip: 'leftMiddle', target: 'rightMiddle' } },
+	  }));
 	  
 	  
 	  $('textarea.richedit').tinymce({
@@ -129,7 +152,7 @@
 
 <div id="hd">
 	<div id="suphd">
-		<h1><a href="<?php echo site_url('dashboard'); ?>" id="ScreenBug" title="Go to Dashboard"><span>G-LAB</span></a></h1>
+		<h1><a href="<?php echo site_url('dashboard'); ?>" id="ScreenBug" class="tip" title="Go to Dashboard"><span>G-LAB</span></a></h1>
 		<div id="tabmenu">
 			<ul>
 				<li><a href="#menu_clients">Clients</a></li>
@@ -179,8 +202,8 @@
 							<h2>Close The Deal...</h2>
 							<ul class="barstyle">
 								<li id="bar_leads">
-									<a href="<?=site_url('sales_tools/sales_leads')?>">
-										<strong>Sales Lead Manager</strong>
+									<a href="<?=site_url('sales_tools')?>">
+										<strong>Sales Toolkit</strong>
 										<p>Log a new lead for the sales team or follow up on a sales lead.</p>
 									</a>
 								</li>
@@ -201,22 +224,16 @@
 						<div class="col">
 							<h2>Make it. Trash it. Fix it.</h2>
 							<ul class="barstyle">
-								<li id="bar_wildfire">
-									<a href="<?=site_url('products/wildfire')?>">
-										<strong>Wildfire</strong>
-										<p>Create, suspend, cancel and troubleshoot subscriptions.</p>
+								<li id="bar_hosting">
+									<a href="<?=site_url('products/web_hosting')?>">
+										<strong>Web Hosting</strong>
+										<p>Manage and support clients' hosting accounts and domain names.</p>
 									</a>
 								</li>
 								<li id="bar_cortex">
 									<a href="<?=site_url('products/cortex')?>">
 										<strong>Cortex</strong>
 										<p>Create, suspend, cancel and troubleshoot subscriptions.</p>
-									</a>
-								</li>
-								<li id="bar_hosting">
-									<a href="<?=site_url('products/web_hosting')?>">
-										<strong>Web Hosting</strong>
-										<p>Manage and support clients' hosting accounts and domain names.</p>
 									</a>
 								</li>
 							</ul>
@@ -286,7 +303,7 @@
 	<div id="bd-inner">
 		<h2><?=ucwords(method_clean($this->router->fetch_class()))?></h2>
 		<div id="crumbtrail">
-			<a href="<?=site_url()?>" title="Go to Dashboard">&nbsp;<span>Home</span></a>
+			<a href="<?=site_url()?>" title="Go to Dashboard" class="tip">&nbsp;<span>Home</span></a>
 			<a href="<?=controller_url()?>"><?=ucwords(method_clean($this->router->fetch_class()))?></a>
 			<?php if($this->router->fetch_method() != 'index'): ?>
 			<a href="<?=controller_url().'/'.$this->router->fetch_method()?>"><?=ucwords(method_clean($this->router->fetch_method()))?></a>
