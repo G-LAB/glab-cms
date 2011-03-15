@@ -56,7 +56,7 @@ class Sales_tools extends CI_Controller {
 		$this->sidebar['stats']['qualified_success_rate'] = $qualified_success_rate['percentage']/1;
 		
 		// STAT: Count Cold Calls This Week
-		$cold_calls_week = $this->db->query("SELECT SUM(count) as count FROM (SELECT COUNT(*) as count FROM sales_leads WHERE tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 1 WEEK) UNION ALL SELECT COUNT(*) as count FROM sales_cold_calls WHERE tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 1 WEEK)) as data_full");
+		$cold_calls_week = $this->db->query("SELECT SUM(count) as count FROM (SELECT COUNT(*) as count FROM sales_leads WHERE WEEKOFYEAR(tsCreated) = WEEKOFYEAR(NOW()) UNION ALL SELECT COUNT(*) as count FROM sales_cold_calls WHERE WEEKOFYEAR(tsCreated) = WEEKOFYEAR(NOW())) as data_summary");
 		$cold_calls_week = $cold_calls_week->row_array();
 		$this->sidebar['stats']['leads_week'] = $cold_calls_week['count'];
 		
@@ -362,23 +362,23 @@ class Sales_tools extends CI_Controller {
 			
 			foreach ($yahoo as $location) {
 				
+				$a_location = (array) $location;
+				
 				$result['id'] = $location->id;
 				
 				if (isset($status[$location->id])) $result['dead'] = TRUE;
 				else $result['dead'] = FALSE;
 				
-				$result['name'] = $location->Title;
-				$result['addr'] = $location->Address;
-				$result['city'] = $location->City;
-				$result['state'] = $location->State;
+				$result['name'] = element('Title', $a_location);
+				$result['addr'] = element('Address', $a_location);
+				$result['city'] = element('City', $a_location);
+				$result['state'] = element('State', $a_location);
 				$result['phone'] = phone_strip($location->Phone);
-				$result['lat'] = $location->Latitude;
-				$result['long'] = $location->Longitude;
-				$result['url'] = @$location->BusinessUrl;
-				$result['domain'] = domain_filter($result['url']);
-				$result['rating'] = (int) @$location->Rating->AverageRating;
-				$result['dist'] = $location->Distance;
-				$result['map'] = $location->MapUrl;
+				$result['lat'] = element('Latitude', $a_location);
+				$result['long'] = element('Longitude', $a_location);
+				$result['url'] = element('BusinessUrl', $a_location);
+				//$result['domain'] = domain_filter($result['url']);
+				$result['dist'] = element('Distance', $a_location);
 				// Concatenate Category List
 				$result['cats'] = null;
 				if ( count(@$location->Categories->Category) > 1 ) {
@@ -392,10 +392,10 @@ class Sales_tools extends CI_Controller {
 				}
 				
 				// Perform WHOIS Lookup
-				if ($result['domain']) {
-					//$this->load->library('whois');
-					//var_dump($this->whois->lookup($result['domain']));
-				}
+				/*if ($result['domain']) {
+					$this->load->library('whois');
+					var_dump($this->whois->lookup($result['domain']));
+				}*/
 				
 				// Send Result Array
 				$results[] = $result;

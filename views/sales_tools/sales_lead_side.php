@@ -45,5 +45,4 @@
 			</span>
 		</li>
 	</ul>
-	<p>Data reflects average over last 120 days.</p>
 </div>
