@@ -153,7 +153,7 @@ class Sales_tools extends CI_Controller {
 		$this->db->where('tsClosed IS NULL');
 		$count_total = $this->db->count_all_results('sales_leads');
 		
-		$config['base_url'] = '/backend/sales_tools/sales_leads';
+		$config['base_url'] = site_url('sales_tools/qualified_sales_leads');
 		$config['total_rows'] = $count_total;
 		$config['per_page'] = '10'; 
 		
