@@ -381,15 +381,12 @@ class Sales_tools extends CI_Controller {
 				$result['dist'] = element('Distance', $a_location);
 				// Concatenate Category List
 				$result['cats'] = null;
-				if ( count(@$location->Categories->Category) > 1 ) {
-					foreach( @$location->Categories->Category as $cat) {
-						$result['cats'] .= $cat->content.', ';
+				if ( isset($location->Categories->Category) ) {
+					foreach( $location->Categories->Category as $cat) {
+						if (isset($cat->content)) $result['cats'] .= $cat->content.', ';
 					}
 					$result['cats'] = substr($result['cats'], 0, -2);
-					
-				} elseif ( count(@$location->Categories->Category) == 1 ) {
-					$result['cats'] = $location->Categories->Category->content;
-				}
+				} 
 				
 				// Perform WHOIS Lookup
 				/*if ($result['domain']) {
