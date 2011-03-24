@@ -50,26 +50,30 @@ class Profile extends CI_Controller {
 		
 		$profile = $this->users->getData($eid);
 		
-		if ($profile) $this->users->updateHistory($eid);
+		if ($profile) {
+			
+			$this->users->updateHistory($eid);
+			
+			$data['pageTitle'] = $profile['name'];
+			$data['content']['nav']['title'] = $profile['name'];
+			
+			$accounts[] = $profile;
+			if ($profile['isCompany'] == '0') foreach($this->users->getCompaniesByEntity($eid) as $acct) $accounts[] = $acct;
+			else foreach($this->users->getPeopleByEntity($eid) as $acct) $accounts[] = $acct;
+			
+			$console['header'] = null;
 		
-		$data['pageTitle'] = $profile['name'];
-		$data['content']['nav']['title'] = $profile['name'];
-		
-		$accounts[] = $profile;
-		if ($profile['isCompany'] == '0') foreach($this->users->getCompaniesByEntity($eid) as $acct) $accounts[] = $acct;
-		else foreach($this->users->getPeopleByEntity($eid) as $acct) $accounts[] = $acct;
-		
-		$console['header'] = null;
-	
-		$console['body'] = $this->load->view('profile/view', array('profile'=>$profile, 'accounts'=>$accounts, 'action'=>$action, 'success'=>$success), TRUE);
-		
-		$console['footer_lt'] = null;
-		$console['footer_rt'] = null;
-		
-		$data['content']['body'] = $this->load->view('console', $console, true);
-		$data['content']['side'] = $this->load->view('_sidebar', null, true);
-		
-		$this->load->view('main',$data);
+			$console['body'] = $this->load->view('profile/view', array('profile'=>$profile, 'accounts'=>$accounts, 'action'=>$action, 'success'=>$success), TRUE);
+			
+			$console['footer_lt'] = null;
+			$console['footer_rt'] = null;
+			
+			$data['content']['body'] = $this->load->view('console', $console, true);
+			$data['content']['side'] = $this->load->view('_sidebar', null, true);
+			
+			$this->load->view('main',$data);
+			
+		} else show_error('Entity profile does not exist.');
 		
 	}
 	
