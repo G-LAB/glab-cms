@@ -33,7 +33,7 @@
 		<li>
 			<span><?=$stats['leads_week']?></span>
 			<span>
-				Leads this week.<br/>
+				Leads for week ending <?=date('n/j',strtotime($stats['leads_week_ending']))?>.<br/>
 				<strong>Target:</strong> 30 Calls
 			</span>
 		</li>

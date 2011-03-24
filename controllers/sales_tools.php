@@ -56,9 +56,10 @@ class Sales_tools extends CI_Controller {
 		$this->sidebar['stats']['qualified_success_rate'] = $qualified_success_rate['percentage']/1;
 		
 		// STAT: Count Cold Calls This Week
-		$cold_calls_week = $this->db->query("SELECT SUM(count) as count FROM (SELECT COUNT(*) as count FROM sales_leads WHERE WEEKOFYEAR(tsCreated) = WEEKOFYEAR(NOW()) UNION ALL SELECT COUNT(*) as count FROM sales_cold_calls WHERE WEEKOFYEAR(tsCreated) = WEEKOFYEAR(NOW())) as data_summary");
+		$cold_calls_week = $this->db->query("SELECT SUM(count) as count, STR_TO_DATE(CONCAT(YEAR(NOW()),WEEKOFYEAR(NOW()),' Sunday'), '%x%v %W') as week_ending FROM (SELECT COUNT(*) as count FROM sales_leads WHERE WEEKOFYEAR(tsCreated) = WEEKOFYEAR(NOW()) UNION ALL SELECT COUNT(*) as count FROM sales_cold_calls WHERE WEEKOFYEAR(tsCreated) = WEEKOFYEAR(NOW())) as data_summary");
 		$cold_calls_week = $cold_calls_week->row_array();
 		$this->sidebar['stats']['leads_week'] = $cold_calls_week['count'];
+		$this->sidebar['stats']['leads_week_ending'] = $cold_calls_week['week_ending'];
 		
 		// STAT: Count Cold Calls Per Week On Average
 		$cold_calls_avg = $this->db->query("SELECT AVG(count) as avg FROM (SELECT week, SUM(count) as count FROM (SELECT WEEKOFYEAR(tsCreated) as week, COUNT(*) as count FROM sales_leads WHERE tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 120 DAY) GROUP BY WEEKOFYEAR(tsCreated) UNION ALL SELECT WEEKOFYEAR(tsCreated) as week, COUNT(*) as count FROM sales_cold_calls WHERE tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 120 DAY) GROUP BY WEEKOFYEAR(tsCreated)) as data_full GROUP BY week) as data_summary");

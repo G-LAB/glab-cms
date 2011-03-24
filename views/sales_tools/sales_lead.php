@@ -83,7 +83,7 @@
 	<?php if ($lead['notes'] != null) : ?>
 	<h5>Notes</h5>
 	<div class="notes">
-		<?=auto_typography(auto_link($lead['notes']))?>
+		<?=auto_typography(auto_link($lead['notes'],'url'))?>
 	</div>
 	<?php endif; ?>
 	<button id="btnAddNote<?=$lead['ldid']?>" class="floatr btnAddNote">Add Note to <?=$lead['companyName']?></button>
@@ -118,7 +118,7 @@
 			<tr>
 				<td><?=date_user(strtotime($note['tsCreated']))?></td>
 				<td><?=entity_link($note['eid'])?></td>
-				<td><?=auto_typography(auto_link($note['note']))?></td>
+				<td><?=auto_typography(auto_link($note['note'],'url'))?></td>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>
