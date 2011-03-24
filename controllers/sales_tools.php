@@ -284,14 +284,20 @@ class Sales_tools extends CI_Controller {
 				if (!isset($company)) $this->db->update('sales_leads',array('eid'=>$person,'tsClosed'=>date('Y-m-d H:i:s')),'ldid = '.$ldid);
 				
 				if (isset($company)) $this->entity->addPerm($company,$person,$this->input->post('p_title'));
-			
-				// COMPLETE TRANSACTION
-				$this->db->trans_complete();
+				
 			}
 			
-			if (isset($company) && $company) redirect('profile/view/'.$company);
-			elseif (isset($person) && $person) redirect('profile/view/'.$person);
-			else redirect('sales_tools');
+			// COMPLETE TRANSACTION
+			$this->db->trans_complete();
+			
+			if ($this->db->trans_status() === FALSE) {
+			    show_error('Could not create entity profile.');
+			} else {
+				if (isset($company) && $company) redirect('profile/view/'.$company);
+				elseif (isset($person) && $person) redirect('profile/view/'.$person);
+				else redirect('sales_tools');
+			}
+			
 		}
 		
 		// Pass Data to Form

@@ -64,7 +64,7 @@
 			<a class="button">Add Phone Number</a>
 			<fieldset class="hide">
 				<label for="p_phone_type">Phone Number Type</label>
-				<?=form_dropdown('p_phone_type',$this->data->typePhone,set_value('p_phone_type'))?>
+				<?=form_dropdown('p_phone_type',$this->data->phone(),set_value('p_phone_type'))?>
 				
 				<label for="p_phone">Phone Number</label>
 				<select name="p_phone" class="otheropt">
@@ -79,7 +79,7 @@
 			<a class="button">Add Address</a>
 			<fieldset class="hide">
 				<label for="p_addr_type">Address Type</label>
-				<?=form_dropdown('p_addr_type',$this->data->typeAddress,set_value('p_addr_type'))?>
+				<?=form_dropdown('p_addr_type',$this->data->address(),set_value('p_addr_type'))?>
 				
 				<label for="p_addr1">Street Address</label>
 				<input type="text" name="p_addr1" value="<?=set_value('p_addr1')?>" id="p_addr1"/><br/>
