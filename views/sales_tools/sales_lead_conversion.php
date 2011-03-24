@@ -17,7 +17,7 @@
 			<input type="text" name="c_companyName" value="<?=set_value('c_companyName',$data['companyName'])?>"/>
 			
 			<label for="c_phone_type">Phone Number Type</label>
-			<?=form_dropdown('c_phone_type',$this->data->typePhone,set_value('c_phone_type'))?>
+			<?=form_dropdown('c_phone_type',$this->data->phone(),set_value('c_phone_type'))?>
 			
 			<label for="c_phone">Company Phone Number</label>
 			<select name="c_phone" class="otheropt">
@@ -29,7 +29,7 @@
 			<input type="text" name="c_phone_other" value="<?=set_value('c_phone_other')?>" class="hide"/>
 			
 			<label for="c_addr_type">Address Type</label>
-			<?=form_dropdown('c_addr_type',$this->data->typeAddress,set_value('c_addr_type'))?>
+			<?=form_dropdown('c_addr_type',$this->data->address(),set_value('c_addr_type'))?>
 			
 			<label for="c_addr1">Street Address</label>
 			<input type="text" name="c_addr1" value="<?=set_value('c_addr1',$data['addr1'])?>" id="c_addr1"/><br/>

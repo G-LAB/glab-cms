@@ -244,7 +244,8 @@ class Sales_tools extends CI_Controller {
 					$c_address['city'] 	= $this->input->post('c_city');
 					$c_address['state'] = $this->input->post('c_state');
 					$c_address['zip5'] 	= $this->input->post('c_zip');
-					$this->entity->addAddress($company,$address);
+					$c_address['type'] 	= $this->input->post('c_addr_type');
+					$this->entity->addAddress($company,$c_address);
 				}
 			
 				$this->db->update('sales_leads',array('eid'=>$company,'tsClosed'=>date('Y-m-d H:i:s')),'ldid = '.$ldid);
@@ -272,7 +273,8 @@ class Sales_tools extends CI_Controller {
 					$p_address['city'] 	= $this->input->post('p_city');
 					$p_address['state'] = $this->input->post('p_state');
 					$p_address['zip5'] 	= $this->input->post('p_zip');
-					$this->entity->addAddress($person,$address);
+					$p_address['type'] 	= $this->input->post('p_addr_type');
+					$this->entity->addAddress($person,$p_address);
 				}
 			
 				// Update Sales Lead 
