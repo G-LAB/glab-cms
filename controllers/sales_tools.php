@@ -184,7 +184,7 @@ class Sales_tools extends CI_Controller {
 		
 		$this->load->helper('form');
 		$this->load->library('form_validation');
-		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
+		$this->form_validation->set_error_delimiters('<div class="msg error">', '</div>');
 		
 		// VALIDATION RULES
 		// Company
@@ -225,6 +225,9 @@ class Sales_tools extends CI_Controller {
 		
 		// Convert to Account
 		if ($this->input->post('action') == 'convert_lead' && $this->form_validation->run()) {
+			
+			// START TRANSACTION
+			$this->db->trans_start();
 			
 			// COMPANY
 			if ($this->input->post('c_companyName')) {
@@ -281,6 +284,9 @@ class Sales_tools extends CI_Controller {
 				if (!isset($company)) $this->db->update('sales_leads',array('eid'=>$person,'tsClosed'=>date('Y-m-d H:i:s')),'ldid = '.$ldid);
 				
 				if (isset($company)) $this->entity->addPerm($company,$person,$this->input->post('p_title'));
+			
+				// COMPLETE TRANSACTION
+				$this->db->trans_complete();
 			}
 			
 			if (isset($company) && $company) redirect('profile/view/'.$company);
