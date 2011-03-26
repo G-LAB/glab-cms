@@ -26,8 +26,7 @@ class Cron extends CI_Controller {
 		// METHOD EXECUTION SCHEDULE
 	
 		$schedule['backupDatabase']		= "0 /12 * * *";
-		$schedule['backupApplications']	= "0 0 * * *";
-		$schedule['backupCodeIgniterCustomScripts']	= "0 0 * * *";
+		$schedule['backupRepository']	= "0 /12 * * *";
 		$schedule['backupRotator'] = "* * * * *";
 		$schedule['checkPbxRecordings'] = "* * * * *";
 		$schedule['parseEmail']			= "* * * * *";
@@ -335,34 +334,19 @@ class Cron extends CI_Controller {
 		
 	}
 	
-	function backupApplications() {
+	function backupRepository() {
 		
 		$this->load->helper('file');
 		$this->load->library('S3_Backup');
 		
-		$filename = 'CI-Applications-'.date(DATE_ISO8601).'.tar.gz';
-		$filelocal = 'CI-Applications-latest.tar.gz';
-		$localpath = realpath('/home/91576/users/.home/data/lib');
+		$filename = 'repository-'.date(DATE_ISO8601).'.tar.gz';
+		$filelocal = $this->config->item('cms_data').'backups/repository-latest.tar.gz';
 		
-		$exec = "cd $localpath && tar -czf $filelocal CI-Applications";
+		$localpath = realpath('/var/www/vhosts/glabstudios.com/repository');
+		
+		$exec = "cd $localpath && tar -czf $filelocal staging";
 		echo system($exec,$retval);
-		echo ($this->s3_backup->create($localpath.'/'.$filelocal, $filename)) ? "File uploaded." : "Failed to upload file.";
-		
-	}
-	
-	function backupCodeIgniterCustomScripts() {
-		
-		$this->load->helper('file');
-		$this->load->library('S3_Backup');
-		
-		$filename = 'CI-Custom-'.date(DATE_ISO8601).'.tar.gz';
-		$filelocal = 'CI-Custom-latest.tar.gz';
-		$localpath = realpath('/home/91576/users/.home/data/lib');
-		$oldhash = md5_file($localpath.'/'.$filelocal);
-		
-		$exec = "cd $localpath && tar -czf $filelocal CI-Custom";
-		echo system($exec,$retval);
-		echo ($this->s3_backup->create($localpath.'/'.$filelocal, $filename)) ? "File uploaded." : "ERROR: Failed to upload file.";
+		echo ($this->s3_backup->create($filelocal, $filename)) ? "File uploaded." : "Failed to upload file.";
 		
 	}
 	
