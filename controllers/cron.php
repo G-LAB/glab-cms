@@ -168,12 +168,12 @@ class Cron extends CI_Controller {
 		$this->load->helper('number');
 		$this->load->model('ticketman');
 		
-		$config['server']	='mail.glabstudios.com';
+		$config['server']	='pop.gmail.com:995';
 		$config['login']	='cms@glabstudios.com';
-		$config['pass']		='2e4a1ahf';
+		$config['pass']		='3puPdwPk6bQNoC';
 		// you may have to look up the imap functions at PHP.net
 		// to get the right set of service flags here
-		$config['service_flags'] = '/notls'; 
+		$config['service_flags'] = '/pop3/ssl/novalidate-cert'; 
 		$config['mailbox']	= 'INBOX';
 		$config['att_path']	= $this->config->item('cms_data').'attachments/';
 		$config['att_age']	= 60*60*24*365;

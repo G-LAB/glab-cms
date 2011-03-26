@@ -1,6 +1,2 @@
 cache
-core
-helpers
-libraries
-models
 controllers/test.php
