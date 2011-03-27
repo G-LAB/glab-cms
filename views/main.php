@@ -9,6 +9,8 @@
 <link rel="stylesheet" type="text/css" href="<?=assets_url()?>styles/global.css"/>
 <link rel="stylesheet" type="text/css" href="<?=assets_url()?>styles/backend.css"/>
 
+<link rel="shortcut icon" type="image/x-icon" href="<?=assets_url('images/logos/favicon.ico')?>" />
+<link rel="icon" type="image/x-icon" href="<?=assets_url('images/logos/favicon.ico')?>" />
 	
 <script src="https://www.google.com/jsapi?key=ABQIAAAASLcb3i3IJ9P8CN7F3D_A9BQ5m8diZEPB9lOpxRem_4loD27uTBSVQalEdt0HpnBCTOmEd0HuJsOrpQ" type="text/javascript"></script>
 <script type="text/javascript">
