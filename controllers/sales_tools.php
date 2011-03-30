@@ -145,8 +145,13 @@ class Sales_tools extends CI_Controller {
 		$leads = $result->result_array();
 		
 			foreach ($leads as $key => $lead) {
+				
+				// Append Notes
 				$note = $this->db->get_where('sales_leads_notes','ldid = '.$lead['ldid']);
 				$leads[$key]['notes_list'] = $note->result_array();
+				
+				// Append Yelp Profile
+				$leads[$key]['yelp'] = $this->yelp->get_business_by_phone($lead['phone']);
 			}
 		
 		$count_this  = count($leads);

@@ -80,6 +80,19 @@
 		<?php endif; ?>
 	</p>
 	
+	<?php if ($lead['yelp']) : ?>
+	<div class="yelp_bar">
+		<img src="http://media3.ct.yelpcdn.com/static/201012162846157596/i/developers/yelp_logo_50x25.png" width="50" height="25" class="logo"/>
+		<p class="name"><a href="<?=$lead['yelp']->url?>"><?=$lead['yelp']->name?></a></p>
+		<img src="<?=$lead['yelp']->rating_img_url?>" class="rating" />
+		<p class="review_count"><?=$lead['yelp']->review_count?> Reviews</p>
+		<p class="read_more"><a href="<?=$lead['yelp']->url?>">Read More</a></p>
+		<?php if ($lead['yelp']->is_closed) : ?>
+		<p class="is_closed">Location is currently closed.</p>
+		<?php endif; ?>
+	</div>
+	<?php endif; ?>
+	
 	<?php if ($lead['notes'] != null) : ?>
 	<h5>Notes</h5>
 	<div class="notes">
