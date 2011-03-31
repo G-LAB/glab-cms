@@ -3,7 +3,7 @@
 class Billing extends CI_Controller {
 	
 	function __construct () {
-		parent::controller();
+		parent::__construct();
 		$this->load->model('billingman');
 		
 		// Console Menu
