@@ -4,3 +4,5 @@ $config['app_name'] = "cms";
 $config['app_version'] = "1.0a";
 
 $config['cms_data'] = "/var/www/vhosts/glabstudios.com/cms_data/";
+
+$config['auth_yelp_key'] = '9sK8i7oHqmlNUyrLmlkkEg';
