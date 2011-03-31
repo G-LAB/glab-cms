@@ -18,7 +18,7 @@
 		        break;
 		}
 	?>
-	<div class="mid body grid">
+	<div class="mid body grid clearfix">
 		<div><strong>Order Number</strong><?=$orid?></div>
 		<div><strong>Date Created</strong><?=date_user(strtotime($order['tsCreated']))?></div>
 		<div><strong>Client Account</strong><?=entity_link($order['eid'])?></div>
@@ -28,7 +28,6 @@
 			<?=form_dropdown('status',$this->data->orderStatus(),$order['status'])?>
 			<button action="submit" name="action" value="updateStatus">Change</button>
 		</div>
-		<div class="clearfix"></div>
 	</div>
 	<div class="mid header">
 		<h4>Address</h4>
