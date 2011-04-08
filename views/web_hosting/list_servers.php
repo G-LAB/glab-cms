@@ -19,7 +19,7 @@
 				</td>
 				<td>
 					<a href="<?=site_url('products/web_hosting/accounts/'.element('psid',$server))?>" class="button">View Accounts</a>
-					<a href="#" class="button red">Restart Services</a>
+					<a href="<?=site_url('products/web_hosting/server/'.element('psid',$server))?>" class="button">View Server</a>
 				</td>
 			</tr>
 			<?php endforeach; ?>
