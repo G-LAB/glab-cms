@@ -117,7 +117,7 @@ body {
 						<tr>
 							<td style="width:340px; padding:0 20px 0 20px;" colspan="2">
 								<a style="color:#485c22; text-decoration:underline;" href="http://glabstudios.com/privacy">CA Privacy Rights</a><br>
-								Copyright © 2010 G LAB. &nbsp;All rights reserved.
+								Copyright © <?=date('Y')?> G LAB. &nbsp;All rights reserved.
 							</td>
 						</tr>
 					</table>
