@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-<title>G LAB (cms) <?=ucwords(method_clean($this->router->fetch_class()))?> : <?=ucwords(method_clean($this->router->fetch_method()))?> <?php if (isset($pageTitle)) echo ' : '.$pageTitle ?></title>
+<title>G LAB (cms) :: <?=ucwords(method_clean($this->router->fetch_class()))?> : <?=ucwords(method_clean($this->router->fetch_method()))?> <?php if (isset($pageTitle)) echo ' : '.$pageTitle ?></title>
 
 <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/yui/2.8.0r4/build/reset-fonts/reset-fonts.css"/>
 <link rel="stylesheet" type="text/css" href="<?=assets_url()?>styles/jquery/jquery-ui-1.8.1.custom.css" />
