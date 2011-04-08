@@ -209,6 +209,12 @@
 										<p>Log a new lead for the sales team or follow up on a sales lead.</p>
 									</a>
 								</li>
+								<li id="bar_billing">
+									<a href="<?=site_url('billing')?>">
+										<strong>Client Billing</strong>
+										<p>Generate estimates or invoices and accept or refund payments.</p>
+									</a>
+								</li>
 								<li id="bar_finance">
 									<a href="<?=site_url('finance')?>">
 										<strong>Finance &amp; Accounting</strong>
@@ -230,12 +236,6 @@
 									<a href="<?=site_url('products/web_hosting')?>">
 										<strong>Web Hosting</strong>
 										<p>Manage and support clients' hosting accounts and domain names.</p>
-									</a>
-								</li>
-								<li id="bar_cortex">
-									<a href="<?=site_url('products/cortex')?>">
-										<strong>Cortex</strong>
-										<p>Create, suspend, cancel and troubleshoot subscriptions.</p>
 									</a>
 								</li>
 							</ul>
