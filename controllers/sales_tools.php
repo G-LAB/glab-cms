@@ -53,7 +53,7 @@ class Sales_tools extends CI_Controller {
 		// STAT: Qualified Success Rate
 		$qualified_success_rate = $this->db->query("SELECT ((SELECT COUNT(*) FROM `sales_leads` WHERE eid IS NOT NULL AND DATE_SUB(CURRENT_DATE, INTERVAL 120 DAY))/COUNT(*)) as percentage FROM `sales_leads` WHERE tsCreated > DATE_SUB(CURRENT_DATE, INTERVAL 120 DAY)");
 		$qualified_success_rate = $qualified_success_rate->row_array();
-		$this->sidebar['stats']['qualified_success_rate'] = $qualified_success_rate['percentage']/1;
+		$this->sidebar['stats']['qualified_success_rate'] = $qualified_success_rate['percentage']*100;
 		
 		// STAT: Count Cold Calls This Week
 		$cold_calls_week = $this->db->query("SELECT SUM(count) as count, STR_TO_DATE(CONCAT(YEAR(NOW()),WEEKOFYEAR(NOW()),' Sunday'), '%x%v %W') as week_ending FROM (SELECT COUNT(*) as count FROM sales_leads WHERE WEEKOFYEAR(tsCreated) = WEEKOFYEAR(NOW()) UNION ALL SELECT COUNT(*) as count FROM sales_cold_calls WHERE WEEKOFYEAR(tsCreated) = WEEKOFYEAR(NOW())) as data_summary");
