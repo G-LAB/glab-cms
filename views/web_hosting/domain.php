@@ -4,7 +4,7 @@
 
 <?php if ($data) : ?>
 <div class="mid body">
-	<a href="<?=site_url('products/web_hosting/reset_client_password/'.$psid.'/'.$domain)?>" class="button">
+	<a href="<?=site_url('products/web_hosting/reset_client_password/'.$psid.'/'.element('eid',$data))?>" class="button">
 		Reset Plesk Password
 	</a>
 	<a href="<?=site_url('products/web_hosting/reset_ftp_password/'.$psid.'/'.$domain)?>" class="button">

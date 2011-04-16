@@ -7,6 +7,7 @@ class Web_hosting extends CI_Controller {
 		
 		$this->cmenu[] = array('url'=>'products/web_hosting/accounts', 'text'=>'Hosting Accounts', 'attr'=>'class=""');
 		$this->cmenu[] = array('url'=>'products/web_hosting/servers', 'text'=>'Physical Servers', 'attr'=>'class=""');
+		$this->cmenu[] = array('url'=>'products/domain_names', 'text'=>'Jump to Domain Names', 'attr'=>'class=""');
 		
 		$this->load->library('plesk');
 		$this->load->library('notification');
@@ -167,7 +168,7 @@ class Web_hosting extends CI_Controller {
 		$console['header'] = $this->load->view('web_hosting/_search', null, TRUE);
 		
 		$console['body'] = $this->load->view('web_hosting/domain', 
-			array(	'data'=>$domain_data, 
+			array(	'data'=>$domain_data,
 					'psid'=>element('psid',$domain_data),
 					'domain'=>$domain, 
 					'charts'=>$charts
@@ -245,13 +246,12 @@ class Web_hosting extends CI_Controller {
 		
 	}*/
 	
-	function reset_client_password ($psid, $domain) {
+	function reset_client_password ($psid, $eid) {
 		
-		$domain_data = $this->hosting->getDomain($psid, $domain);
-		$result = $this->hosting->updatePasswordCustomer($psid,$domain_data['gen_info']['owner-id']);
+		$result = $this->hosting->updatePasswordCustomer($psid,$eid);
 		
 		$console['header'] = $this->load->view('web_hosting/_search', null, TRUE);
-		var_dump($result);
+		
 		$console['body'] = $this->load->view('web_hosting/password_result_client', $result, TRUE);
 		
 		$console['footer_lt'] = null;
