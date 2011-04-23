@@ -4,7 +4,6 @@ class Pbx extends CI_Controller {
 	
 	function __construct() {
 		parent::__construct();
-		$this->load->library('Asterisk');
 	}
 	
 	function cid() {
@@ -43,6 +42,8 @@ class Pbx extends CI_Controller {
 	}
 	
 	function call ($phone) {
+		
+		$this->load->library('Asterisk');
 		
 		$num = phone_strip($phone);
 		if (strlen($phone) > 4) $num = '91'.$num;
