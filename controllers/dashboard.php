@@ -35,6 +35,16 @@ class Dashboard extends CI_Controller {
 		$data['vmCount'] = $this->asterisk->getVMCount();
 		echo json_encode($data);
 	}
+
+	function ajax_socialpost () {
+		
+		$status = $this->input->post('value');
+		
+		if ($this->twitter->tweet($status));
+		
+		echo $status;
+	}
+
 }
 
 ?>

@@ -45,24 +45,34 @@
 			<td class="justr"><a href="#" class="phoneNumber">*32</a></td>
 		</tr>
 		<tr>
-			<td>Google 411</td>
+			<td>Directory Assistance</td>
 			<td class="justr"><a href="#" class="phoneNumber">9411</a></td>
 		</tr>
 	</table>
 </div>
 
-
 <?php 
-
-$twitter['id'] = 'glabstudios';
-$twitter['count'] = 1;
-
-$twitter = json_decode(Feed_Request('http://api.twitter.com/1/statuses/user_timeline.json',$twitter)); 
-
+	$twitter = $this->twitter->get_status('glabstudios');
+	if ($twitter) : 
 ?>
-<?php if (is_array($twitter) && count($twitter) > 0) : ?>
-<blockquote id="twitter" cite="http://twitter.com/<?=$twitter[0]->user->screen_name?>/status/<?=$twitter[0]->id?>">
-	<p><?=parse_tweet($twitter[0]->text)?></p>
-</blockquote>
-<p>Last updated <?=date_relative(strtotime($twitter[0]->created_at))?>.</p>
+<div id="social_status">
+	<blockquote id="twitter" cite="http://twitter.com/<?=$twitter->user->screen_name?>/status/<?=$twitter->id?>">
+		<p id="post_content"><?=parse_tweet($twitter->text)?></p>
+	</blockquote>
+	<p>Last updated <span id="updated"><?=date_relative(strtotime($twitter->created_at))?></span>.</p>
+</div>
+<script type="text/javascript">
+
+ $(document).ready(function() {
+    $('#post_content').editable('/backend/dashboard/ajax_socialpost',{
+		type: 'textarea',
+		data : "\b",
+		submit: 'Send Update',
+		callback: function () {
+			$('#social_status #updated').html('just now');
+		}
+	});
+ });
+
+</script>
 <?php endif; ?>

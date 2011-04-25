@@ -24,6 +24,7 @@
 <script type="text/javascript" src="<?=assets_url()?>js/tiny_mce/jquery.tinymce.js"></script>
 <script type="text/javascript" src="<?=assets_url()?>js/jquery.qtip.min.js"></script>
 <script type="text/javascript" src="<?=assets_url()?>js/jquery.placeholder.js"></script>
+<script type="text/javascript" src="<?=assets_url()?>js/jquery.jeditable.min.js"></script>
 
 <?=$this->header->get()?>
 
@@ -236,6 +237,12 @@
 									<a href="<?=site_url('products/web_hosting')?>">
 										<strong>Web Hosting</strong>
 										<p>Manage and support clients' hosting accounts and domain names.</p>
+									</a>
+								</li>
+								<li id="bar_domains">
+									<a href="<?=site_url('products/domain_names')?>">
+										<strong>Domain Names</strong>
+										<p>Manage and support domain name registrations.</p>
 									</a>
 								</li>
 							</ul>
