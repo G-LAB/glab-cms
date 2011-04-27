@@ -5,9 +5,9 @@
 <title>G LAB (cms) :: <?=ucwords(method_clean($this->router->fetch_class()))?> : <?=ucwords(method_clean($this->router->fetch_method()))?> <?php if (isset($pageTitle)) echo ' : '.$pageTitle ?></title>
 
 <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/yui/2.8.0r4/build/reset-fonts/reset-fonts.css"/>
-<link rel="stylesheet" type="text/css" href="<?=assets_url()?>styles/jquery/jquery-ui-1.8.1.custom.css" />
-<link rel="stylesheet" type="text/css" href="<?=assets_url()?>styles/global.css"/>
-<link rel="stylesheet" type="text/css" href="<?=assets_url()?>styles/backend.css"/>
+<link rel="stylesheet" type="text/css" href="<?=assets_url('styles/jquery/jquery-ui-1.8.1.custom.css')?>" />
+<link rel="stylesheet" type="text/css" href="<?=assets_url('styles/global.css')?>"/>
+<link rel="stylesheet" type="text/css" href="<?=assets_url('styles/backend.css')?>"/>
 
 <link rel="shortcut icon" type="image/x-icon" href="<?=assets_url('images/logos/favicon.ico')?>" />
 <link rel="icon" type="image/x-icon" href="<?=assets_url('images/logos/favicon.ico')?>" />
@@ -18,13 +18,13 @@
   google.load("jquery", "1");
   google.load("jqueryui", "1");
 </script>
-<script type="text/javascript" src="<?=assets_url()?>js/jquery.bgiframe.min.js"></script>
-<script type="text/javascript" src="<?=assets_url()?>js/jquery.AutoEllipsis.js"></script>
-<script type="text/javascript" src="<?=assets_url()?>js/autoresize.jquery.min.js"></script>
+<script type="text/javascript" src="<?=assets_url('js/jquery.bgiframe.min.js')?>"></script>
+<script type="text/javascript" src="<?=assets_url('js/jquery.AutoEllipsis.js')?>"></script>
+<script type="text/javascript" src="<?=assets_url('js/autoresize.jquery.min.js')?>"></script>
 <script type="text/javascript" src="<?=assets_url()?>js/tiny_mce/jquery.tinymce.js"></script>
-<script type="text/javascript" src="<?=assets_url()?>js/jquery.qtip.min.js"></script>
-<script type="text/javascript" src="<?=assets_url()?>js/jquery.placeholder.js"></script>
-<script type="text/javascript" src="<?=assets_url()?>js/jquery.jeditable.min.js"></script>
+<script type="text/javascript" src="<?=assets_url('js/jquery.qtip.min.js')?>"></script>
+<script type="text/javascript" src="<?=assets_url('js/jquery.placeholder.js')?>"></script>
+<script type="text/javascript" src="<?=assets_url('js/jquery.jeditable.min.js')?>"></script>
 
 <?=$this->header->get()?>
 
@@ -70,7 +70,7 @@
 	  
 	  $('textarea.richedit').tinymce({
   			// Location of TinyMCE script
-  			script_url : '/js/tiny_mce/tiny_mce.js',
+  			script_url : '<?=assets_url('js/tiny_mce/tiny_mce.js')?>',
   
   			// General options
   			theme : "advanced",
@@ -300,7 +300,7 @@
 		<div id="HUD_Loading">
 			<div id="progress">
 				Loading...
-				<img src="<?=assets_url()?>images/global/progressbar.gif"/>
+				<img src="<?=assets_url('images/global/progressbar.gif')?>"/>
 			</div>
 		</div>
 	</div>
