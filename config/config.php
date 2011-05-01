@@ -11,7 +11,7 @@
 |	http://example.com/
 |
 */
-$config['base_url']	= "https://".$_SERVER['SERVER_NAME']."/backend/";
+$config['base_url']	= "https://".$_SERVER['SERVER_NAME'];
 
 /*
 |--------------------------------------------------------------------------
