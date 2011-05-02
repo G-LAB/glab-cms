@@ -20,6 +20,18 @@
 	</p>
 </div>
 <?php endif; ?>
+<?php if (isset($data['mt']) && $data['mt']) : ?>
+<div class="mid header">
+	<h5>Media Temple (mt) Service (<?=$data['mt']['billingStatusText']?>)</h5>
+</div>
+<div class="mid body">
+	<p class="clearfix">
+		<strong>Service Type:</strong> <?=$data['mt']['serviceTypeName']?><br/>
+		<strong>Operating System:</strong> <?=$data['mt']['operatingSystemName']?><br/>
+		<strong>Host Server:</strong> <?=$data['mt']['hostServer']?><br/>
+	</p>
+</div>
+<?php endif; ?>
 <?php if (isset($data['services_state'])) : ?>
 <div class="mid header">
 	<h5>Service States</h5>

@@ -14,3 +14,5 @@ $config['auth_twitter_consumer_key'] = 'IdsOac5oJPPOrACJDfKyRA';
 $config['auth_twitter_consumer_secret'] = 'YemOu9KVfFIp2AULFNwKzJohyyiLSnW5ehWkTJA';
 $config['auth_twitter_user_token'] = '81693722-cIY7v4Z7PkZ5K6BkNCb2Sg6YPPl5oBNwZgB70jsF4';
 $config['auth_twitter_user_secret'] = 'K8sXFmP7agxDrpEwFB9n0ZGgX0yA1aJxawtSlWcA4TY';
+
+$config['auth_mediatemple_key'] = 'FbDgCrdQNr9V31Vt1u46Kwtsm3FbSE4TBJZp3z2CxWxl58gtlmunpO3loADrBwyja';
