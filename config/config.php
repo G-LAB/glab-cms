@@ -251,7 +251,7 @@ $config['sess_time_to_update'] 	= 300;
 |
 */
 $config['cookie_prefix']	= "";
-$config['cookie_domain']	= ".glabstudios.com";
+$config['cookie_domain']	= "";
 $config['cookie_path']		= "/";
 
 /*
