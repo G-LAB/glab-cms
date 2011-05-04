@@ -5,15 +5,15 @@
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
 <title>G-LAB :: Customer Management System <?php if (isset($heading)) echo ' : '.$heading ?></title>
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/reset-fonts/reset-fonts.css"/>
-<link rel="stylesheet" type="text/css" href="/styles/global.css"/>
-<link rel="stylesheet" type="text/css" href="/styles/backend.css"/>
+<link rel="stylesheet" type="text/css" href="https://glabassets.s3.amazonaws.com/styles/global.css"/> 
+<link rel="stylesheet" type="text/css" href="https://glabassets.s3.amazonaws.com/styles/backend.css"/> 
 </head>
 
 <body class="minimal">
 
 <div id="hd">
 	<div id="suphd">
-		<a href="#" id="ScreenBug" title="Go to Dashboard"><span>Go to Dashboard</span></a>
+		<a href="/" id="ScreenBug" title="Go to Dashboard"><span>Go to Dashboard</span></a>
 	</div>
 	<div id="subhd">
 		<h1>G-LAB</h1>
