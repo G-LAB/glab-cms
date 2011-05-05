@@ -3,8 +3,11 @@
 class Billing extends CI_Controller {
 	
 	function __construct () {
+		
 		parent::__construct();
+		
 		$this->load->model('billingman');
+		$this->load->helper('inflector');
 		
 		// Console Menu
 		$this->cmenu[] = array('url'=>'billing/orders', 'text'=>'Orders');
@@ -16,9 +19,28 @@ class Billing extends CI_Controller {
 		redirect('billing/orders');
 	}
 	
-	function orders($status=1) {
+	function estimate($orid) {
+		
+		$order = $this->billingman->getOrder($orid);
+		
+		if ($order) $estimates = $this->billingman->getEstimates($orid);
+		else show_error('Order not found.');
+		
+		$console['body'] = $this->load->view('billing/estimate_edit', array('orid'=>$orid,'estimates'=>$estimates), TRUE);
+		
+		$data['content']['body'] = $this->load->view('console', $console, true);
+		$data['content']['side'] = $this->load->view('_sidebar', null, true);
+		
+		$this->load->view('main',$data);
+	}
+	
+	function orders() {
+		
 		$this->load->helper('form');
-		$orders = $this->billingman->getOrders();
+		
+		$status = $this->input->get('status');
+		
+		$orders = $this->billingman->getOrders($status);
 	
 		$console['body'] = $this->load->view('billing/orders', array('orders'=>$orders,'status'=>$status), TRUE);
 		
@@ -118,6 +140,21 @@ class Billing extends CI_Controller {
 		$data['content']['side'] = $this->load->view('_sidebar', null, true);
 		
 		$this->load->view('main',$data);
+	}
+	
+	function print_order ($orid=false, $html=false) {
+		
+		$odata['orid'] = $orid;
+		$odata['order'] = $this->billingman->getOrder($orid);
+		$odata['items'] = $this->billingman->getOrderItems($orid);
+		$odata['invoices'] = $this->billingman->getOrderInvoices($orid);
+		$odata['subtotal'] = $this->billingman->getOrderSubtotal($orid);
+		$odata['address'] = $this->entity->getAddress($odata['order']['addrid']);
+		$odata['taxRate'] = $this->billingman->getTaxRate($odata['address']['state']);
+		
+		if ($html) $this->load->view('billing/order_print', $odata);
+		else $this->load->pdf('billing/order_print', $odata);
+		
 	}
 	
 	function products() {
