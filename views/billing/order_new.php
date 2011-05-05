@@ -29,7 +29,7 @@
 <script type="text/javascript">
 	$( "#tmplEntityRow" ).template( "tmplEntityRow" );
 	$('#entitySearchBox').keyup( function () {
-	  $.post('/backend/billing/ajax/entities', {q: $("#entitySearchBox").val()}, function(data) {
+	  $.post('<?=site_url('billing/ajax/entities')?>', {q: $("#entitySearchBox").val()}, function(data) {
 	    $("#results tbody").text('');
 	    $.tmpl("tmplEntityRow",data).appendTo( "#results tbody" );
 	  }, "json");

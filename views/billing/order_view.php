@@ -1,33 +1,18 @@
 <form action="<?=current_url()?>" method="post">
 	<div class="mid header">
-		<h4>Order Details</h4>
+		<?php if (element('status',$order) == 'estimate') : ?>
+		<a href="<?=site_url('billing/estimate/'.$orid)?>" class="button floatr">Prepare Estimate</a>
+		<?php else : ?>
+		<a href="<?=site_url('billing/print_order/'.$orid)?>" class="button floatr">Download PDF</a>
+		<?php endif; ?>
+		<h4><?=(element('status',$order) == 'estimate') ? 'Estimate' : 'Order'?> Details</h4>
 	</div>
-	<?php 
-		switch (element('status',$order)) {
-		    case 0:
-		        $status = 'cancelled';
-		        break;
-		    case 1:
-		        $status = 'active';
-		        break;
-		    case 2:
-		        $status = 'active';
-		        break;
-		    default:
-		        $status = 'pending';
-		        break;
-		}
-	?>
 	<div class="mid body grid clearfix">
 		<div><strong>Order Number</strong><?=$orid?></div>
 		<div><strong>Date Created</strong><?=date_user(strtotime($order['tsCreated']))?></div>
 		<div><strong>Client Account</strong><?=entity_link($order['eid'])?></div>
 		<div><strong>Prepared By</strong><?=entity_link($order['eidCreated'])?></div>
-		<div>
-			<strong>Order Status</strong>
-			<?=form_dropdown('status',$this->data->orderStatus(),$order['status'])?>
-			<button action="submit" name="action" value="updateStatus">Change</button>
-		</div>
+		<div><strong>Order Status</strong><?=humanize($order['status'])?></div>
 	</div>
 	<div class="mid header">
 		<h4>Address</h4>
@@ -43,7 +28,7 @@
 			<button action="submit" name="action" value="update" class="green">Update Order</button>
 			</div>
 			<?php endif; ?>
-		<h4>Items in Order</h4>
+		<h4>Items in <?=(element('status',$order) == 'estimate') ? 'Estimate' : 'Order'?></h4>
 	</div>
 	<div class="mid body">
 		<?=validation_errors('<div class="msg error">', '</div>'); ?>
@@ -108,7 +93,7 @@
 		<?php endforeach; ?>
 		<?php if (!isset($item)) : ?>
 				<tr>
-					<td colspan="6">There are no items in this order.</td>
+					<td colspan="6">There are no items in this <?=(element('status',$order) == 'estimate') ? 'estimate' : 'order'?>.</td>
 				</tr>
 		<?php endif; ?>
 			</tbody>
@@ -157,7 +142,7 @@
 		<?php if ($order['addrid'] && $editable) : ?>
 		<button action="submit" name="action" value="invoice" class="floatr green" id="btnGenInvoice">Generate Invoices</button>
 		<?php endif; ?>
-		<h4>Invoices in this Order</h4>
+		<h4>Invoices</h4>
 	</div>
 </form>
 <?=$this->load->view('billing/invoices', array('data'=>$invoices), TRUE)?>
@@ -209,7 +194,7 @@
 		  });
 		  $( "#tmplProdRow" ).template( "tmplProdRow" );
 		  $('#prodSearchBox').keyup( function () {
-			  $.post('/backend/billing/ajax/products', {q: $("#prodSearchBox").val()}, function(data) {
+			  $.post('<?=site_url('billing/ajax/products')?>', {q: $("#prodSearchBox").val()}, function(data) {
 			    $("#prodResults tbody").text('');
 			    $.tmpl("tmplProdRow",data).appendTo( "#prodResults tbody" );
 			  }, "json");
