@@ -12,7 +12,19 @@
 <?php endif; ?>
 
 <div class="widget">
-	<h2>Phone Directory</h2>
+	<h2>Helpful Links</h2>
+		<ul class="links">
+			<li><a href="https://login.mailchimp.com/google-apps?domain=glabstudios.com">Mail Chimp</a></li>
+			<li><a href="https://webmail.glabstudios.com/">Google Webmail</a></li>
+			<li><a href="https://www.google.com/calendar/hosted/glabstudios.com">Google Calendar</a></li>
+			<li><a href="https://www.google.com/a/glabstudios.com">Google Account Manager</a></li>
+			<li><a href="https://glab.signin.aws.amazon.com/console">Amazon AWS Console</a></li>
+		</ul>
+</div>
+
+<div class="widget">
+	<h2>Phone Dialer</h2>
+	<h3>Directory</h3>
 	<table>
 		<tr>
 			<td>Jeremy Aluma</td>
@@ -27,10 +39,7 @@
 			<td class="justr"><a href="#" class="phoneNumber">103</a></td>
 		</tr>
 	</table>
-</div>
-
-<div class="widget">
-	<h2>Feature Codes</h2>
+	<h3>Feature Codes</h3>
 	<table>
 		<tr>
 			<td>Check Voicemail</td>
