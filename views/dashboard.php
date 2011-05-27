@@ -59,7 +59,7 @@
 		</ul>
 		<?php foreach ($rss as $fid=>$feed) if (isset($feed->channel)) : ?>
 		<div id="blog-<?=$fid?>">
-			<h4><?php if (isset($feed->channel->image)): ?><a href="<?=$feed->channel->image->link ?>"><img src="<?=$feed->channel->image->url ?>" alt="<?=$feed->channel->image->title ?>"/></a><?php else: echo $feed->channel->title; endif; ?></h4>
+			<h4><?php echo $feed->channel->title; ?></h4>
 			<ul>
 			<?php foreach($feed->channel->item as $item) : ?>
 				<li>
