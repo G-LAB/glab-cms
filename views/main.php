@@ -16,8 +16,8 @@
 <script type="text/javascript">
   // Load jQuery
   google.load("jquery", "1");
-  google.load("jqueryui", "1");
 </script>
+<script type="text/javascript" src="<?=assets_url('js/jquery-ui-1.8.13.custom.min.js')?>"></script>
 <script type="text/javascript" src="<?=assets_url('js/jquery.bgiframe.min.js')?>"></script>
 <script type="text/javascript" src="<?=assets_url('js/jquery.AutoEllipsis.js')?>"></script>
 <script type="text/javascript" src="<?=assets_url('js/autoresize.jquery.min.js')?>"></script>
@@ -33,9 +33,15 @@
 	$(document).ready(function() {
 	  $('#HUD_Loading').hide();
 	  var tipTemplate = {
+	     overwrite: false,
 	     show: 'mouseover',
 	     hide: 'mouseout',
-	     position: { corner: { tooltip: 'topMiddle', target: 'bottomMiddle' } },
+	     position: { 
+	     	corner: { 
+	     		tooltip: 'leftMiddle', 
+	     		target: 'rightMiddle' 
+	     	} 
+	     },
 	     style: {
 	       border: {
 	          width: 1,
@@ -51,8 +57,6 @@
 	  }));
 	  $('input').placeholder();
 	  $(".rtrim").addClass("nowrap").autoEllipsis();
-	  $(".buttonBar").after('<span class="clear"></div>');
-	  $(".buttonBar .button").addClass("ui-corner-all");
 	  $('textarea.autoResize').autoResize();
 	  
 	  // Phone Number Click-to-Call
@@ -62,20 +66,27 @@
 	  			'After you answer you will be connected to ' + $(this).html() + '.' );
 	  	var num = $(this).html();
 	  	$.get('<?=site_url('pbx/call')?>/' + num);
-	  }).qtip( $.extend(true, {}, tipTemplate, {
-	     content: 'Click-to-Call',
-	     position: { corner: { tooltip: 'leftMiddle', target: 'rightMiddle' } },
-	  }));
+	  });
+	  
+	  $(".phoneNumber").live('mouseover', function(event) {
+	  	  if($(this).data('qtip')) return true;
+	  	  $(this).qtip( $.extend(true, {}, tipTemplate, {
+	  			overwrite: false,
+	  			show: {
+	                event: event.type,
+	                ready: true
+	            },
+	  			content: 'Click-to-Call'
+	  	  }), event); //qtip
+	  }); //live 
 	  
 	  
 	  $('textarea.richedit').tinymce({
   			// Location of TinyMCE script
   			script_url : '<?=assets_url('js/tiny_mce/tiny_mce.js')?>',
-  
   			// General options
   			theme : "advanced",
   			plugins : "safari,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,fullscreen",
-  
   			// Theme options
   			theme_advanced_buttons1 : "formatselect,bold,italic,underline,strikethrough",
   			theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code",
@@ -83,14 +94,35 @@
   			theme_advanced_toolbar_location : "top",
   			theme_advanced_toolbar_align : "left",
   			theme_advanced_statusbar_location : "bottom",
-  			theme_advanced_resizing : false,
-  
-  			// Example content CSS (should be your site CSS)
-  			//content_css : "/styles/content.css",
-  
+  			theme_advanced_resizing : false
   		});
-	  
-	});
+	  $('address').live('mouseover', function(event) {
+		  if($(this).data('qtip')) return true;
+		  $(this).qtip( $.extend(true, {}, tipTemplate, {
+				overwrite: false,
+				show: {
+	                event: event.type,
+	                ready: true
+	            },
+				hide: { 
+					fixed: true 
+				},
+				content: {
+					text: 'Loading...',
+					url: '<?=site_url('ajax/qtip_address')?>',
+					data: { 
+						address: this.innerText
+					},
+					method: 'post'
+				},
+				api: {
+					beforeContentUpdate: function () {
+						var address = this.elements.target[0].innerText;	
+					}
+				}
+		  }), event); //qtip
+	  }); //live 
+	}); // jQuery.ready
 	
 	// Update HUD
 	function updateHUD (eid) {
@@ -111,24 +143,6 @@
 		$("#selectMenu").toggle("blind",null,"slow");		
 	}
 	
-	function displayMap (addr) {
-		event.preventDefault();
-		var addr = escape(addr);
-		$("#map").html("<iframe width=\"600\" height=\"450\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" src=\"http:\/\/maps.google.com\/maps?f=q&amp;source=s_q&amp;hl=en&amp;q=" + addr + "&amp;output=embed\"><\/iframe>");
-		
-		$("#dialogMap").dialog({
-			bgiframe: true,
-			width: 620,
-			height: 495,
-			modal: true,
-			close: function() {
-				$(this).dialog('destroy');
-			}
-		});
-		
-		$(".ui-dialog").wrap('<div id="divConatiner" class="ui-style"></div>');
-	}
-	
 	function searchHUD () {
 		event.preventDefault();
 		$("#cu3er-container").hide();
@@ -141,17 +155,11 @@
 				    $("#HUD_Loading").fadeOut("fast");
 				  });
 			});
-	}
-
-	
+	} 
 </script>
 </head>
 
 <body class="main <?=$this->router->fetch_class()?> <?=$this->router->fetch_method()?>">
-
-<div id="dialogMap" title="View Google Map" class="hide">
-	<div id="map"></div>
-</div>
 
 <div id="hd">
 	<div id="suphd">
