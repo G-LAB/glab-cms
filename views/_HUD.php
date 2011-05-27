@@ -31,12 +31,10 @@ if (isset($eid) && $eid != null) { ?>
 					<li>
 						<h3><?php if ($address['label'] != null) { echo $address['label']; } elseif ($address['type'] == 'm') { echo 'Mailing'; } elseif ($address['type'] == 'o') { echo 'Office'; } elseif ($address['type'] == 'b') { echo 'Billing'; } elseif ($address['type'] == 'h') { echo 'Home'; } ?></h3>
 						<address>
-							<a href="#" onclick="displayMap('<?php echo urlencode($address['full']) ?>');">
-								<?php echo preg_replace('/\s/','&nbsp;',$address['addr1']); if ($address['addr2'] == null) { ?><br/><?php } ?> 
-								<?php echo preg_replace('/\s/','&nbsp;',$address['addr2']); if ($address['addr2'] != null) { ?><br/><?php } ?>
-								<?php echo $address['city']; ?>, <?php echo $address['state']; ?> 
-								<?php echo $address['zip5']; if ($address['zip4'] != null) { ?>-<?php echo $address['zip4']; } ?>
-							</a>
+							<?php echo preg_replace('/\s/','&nbsp;',$address['addr1']); if ($address['addr2'] == null) { ?><br/><?php } ?> 
+							<?php echo preg_replace('/\s/','&nbsp;',$address['addr2']); if ($address['addr2'] != null) { ?><br/><?php } ?>
+							<?php echo $address['city']; ?>, <?php echo $address['state']; ?> 
+							<?php echo $address['zip5']; if ($address['zip4'] != null) { ?>-<?php echo $address['zip4']; } ?>
 						</address>
 					</li>
 					<?php endforeach; ?>
@@ -70,15 +68,19 @@ if (isset($eid) && $eid != null) { ?>
 		<div id="tabs" class="hide">
 			<ul>
 				<li><a href="#tab-purchased">Products and Services</a></li>
-				<li><a href="#tab-invoices">Invoices</a></li>
+				<li><a href="#tab-billing">Billing</a></li>
 				<?php if ($HUD['isCompany'] == true) : ?><li><a href="#tab-people">People</a></li><?php endif; ?>
 				<?php if ($HUD['isCompany'] == false) : ?><li><a href="#tab-accounts">Accounts</a></li><?php endif; ?>
 			</ul>
 			<div id="tab-purchased" class="tab">
-				
+				<p class="msg">
+					This feature is still in developement.
+				</p>
 			</div>
-			<div id="tab-invoices" class="tab">
-				Phasellus mattis tincidunt nibh. Cras orci urna, blandit id, pretium vel, aliquet ornare, felis. Maecenas scelerisque sem non nisl. Fusce sed lorem in enim dictum bibendum.
+			<div id="tab-billing" class="tab">
+				<p class="msg">
+					This feature is still in developement.
+				</p>
 			</div>
 			<?php if ($HUD['isCompany'] == true) : ?>
 			<div id="tab-people" class="tab">
