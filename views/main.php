@@ -300,6 +300,7 @@
 		</div>
 		<script type="text/javascript">
 			$(document).ready(function() {
+			  
 			  $("#tabmenu").tabs( { collapsible: true, selected: -1 } );
 			  
 			  $("#menu_search_trigger").click( function () {
@@ -308,8 +309,8 @@
 			  	$(this).parent().addClass('ui-state-active-search');
 			  	$("#tabmenu").tabs( "select" , -1 );
 			  	event.preventDefault();
-			  	//alert('search');
 			  });
+			  
 			});
 		</script>
 	</div>
