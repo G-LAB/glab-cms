@@ -98,7 +98,7 @@
 </div>
 <div class="mid body">
 	<?php if ($profile['isCompany'] == TRUE) : ?>
-		<a href="#" class="button floatr" id="btnGrantPerms">Grant Access to <?=$profile['name']?></a>
+		<a href="#" class="button floatr in_development" id="btnGrantPerms">Grant Access to <?=$profile['name']?></a>
 		
 		<h4>Authorized Users</h4>
 	
@@ -128,45 +128,25 @@
 				<td><?=acctnum_format($account['acctnum']) ?></td>
 				<td><a href="#" onclick="updateHUD(<?=$account['eid'] ?>);"><?=$account['name'] ?></a></td>
 				<td><?php if (isset($account['jobTitle'])) echo $account['jobTitle']; ?></td>
-				<td><?php if($account['eid'] != $profile['eid']):?><a href="#" class="button red">Drop Permissions</a><?php endif;?></td>
+				<td><?php if($account['eid'] != $profile['eid']):?><a href="#" class="button red in_development">Drop Permissions</a><?php endif;?></td>
 			</tr>
 			<?php endforeach; ?>
 		</tbody>
 	</table>
 </div>
 
-<div id="dialogGrantPerms">
-	<?=feature_message()?>
-</div>
-
 <script type="text/javascript">
-	$('#dialogGrantPerms').dialog({
-				title: "Grant Account Access",
-				modal: true,
-				autoOpen: false,
-				buttons: {
-					Cancel: function() {
-						$(this).dialog('close');
-					},
-					Ok: function() {
-						$(this).dialog('close');
-					}
-				}
-	});
 	
-	$('#btnGrantPerms').click( function () {
-		$('#dialogGrantPerms').dialog("open");
+	$('#btnAddEmail').click( function (event) {
 		event.preventDefault();
-	});
-	
-	
-	$('#btnAddEmail').click( function () {
 		$('#addEmail').slideDown();
 	});
-	$('#btnAddPhone').click( function () {
+	$('#btnAddPhone').click( function (event) {
+		event.preventDefault();
 		$('#addPhone').slideDown();
 	});
-	$('#btnAddAddress').click( function () {
+	$('#btnAddAddress').click( function (event) {
+		event.preventDefault();
 		$('#addAddress').slideDown();
 	});
 	

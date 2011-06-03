@@ -31,7 +31,10 @@
 <script type="text/javascript">
 	// Hide Loading Message
 	$(document).ready(function() {
+	  
+	  // Hide Loading Message
 	  $('#HUD_Loading').hide();
+	  
 	  var tipTemplate = {
 	     overwrite: false,
 	     show: 'mouseover',
@@ -52,9 +55,15 @@
 	       tip: true
 	     }
 	  };
+	  
 	  $('.tip').qtip( $.extend(true, {}, tipTemplate, {
 	     // No Options, Use Content From Title Attribute
 	  }));
+	  
+	  $('.in_development').qtip( $.extend(true, {}, tipTemplate, {
+	     content: 'Feature coming soon!'
+	  }));
+	  
 	  $('input').placeholder();
 	  $(".rtrim").addClass("nowrap").autoEllipsis();
 	  $('textarea.autoResize').autoResize();
