@@ -139,7 +139,7 @@
 		$('html, body').animate({scrollTop:0}, 'slow'); 
 		$("#HUD_Loading").fadeIn("fast",
 			function () {
-				$.get("<?php echo site_url("HUD/load/"); ?>/" + eid, null,
+				$.get("<?=site_url("HUD/load/") ?>/" + eid, null,
 				  function(data){
 				    $("#HUD").html(data);
 				    $("#HUD_Loading").fadeOut("fast");
@@ -158,7 +158,7 @@
 		$("#HUD_Loading").fadeIn("fast",
 			function () {
 				var searchQuery = $('#search input').val();
-				$.post("<?php echo site_url("HUD/search"); ?>", { q: searchQuery },
+				$.post("<?=site_url("HUD/search") ?>", { q: searchQuery },
 				  function(data){
 				    $("#HUD").html(data);
 				    $("#HUD_Loading").fadeOut("fast");
@@ -172,7 +172,7 @@
 
 <div id="hd">
 	<div id="suphd">
-		<h1><a href="<?php echo site_url('dashboard'); ?>" id="ScreenBug" class="tip" title="Go to Dashboard"><span>G-LAB</span></a></h1>
+		<h1><a href="<?=site_url('dashboard') ?>" id="ScreenBug" class="tip" title="Go to Dashboard"><span>G-LAB</span></a></h1>
 		<div id="tabmenu">
 			<ul>
 				<li><a href="#menu_clients">Clients</a></li>
@@ -315,7 +315,7 @@
 		</script>
 	</div>
 	<div id="subhd">
-		<?php echo $this->load->view('_HUD', $HUD=null); ?>
+		<?=$this->load->view('_HUD', $HUD=null) ?>
 		<div id="HUD_Loading">
 			<div id="progress">
 				Loading...
@@ -325,7 +325,7 @@
 	</div>
 </div>
 <div id="user">
-	<?php $this->load->view('_userhud'); ?>
+	<?php $this->load->view('_userhud') ?>
 </div>
 <div id="bd" class="fancy_corners">
 	<div id="bd-inner">
@@ -337,17 +337,17 @@
 			<a href="<?=controller_url().'/'.$this->router->fetch_method()?>"><?=ucwords(method_clean($this->router->fetch_method()))?></a>
 			<?php endif; if (isset($content['nav']['title'])) : ?>
 			<a href="<?php if (isset($content['nav']['uri'])) echo site_url($content['nav']['uri']); else echo current_url()?>"><?=$content['nav']['title']?></a>
-			<?php endif; ?>
+			<?php endif ?>
 		</div>
-		<div id="target"><?php echo $content['body'] ?></div>
+		<div id="target"><?=$content['body'] ?></div>
 	</div>
 	<div id="bd-side">
-		<?php echo $content['side'] ?>
+		<?=$content['side'] ?>
 	</div>
 	<div class="clear"></div>
 </div>
 <div id="ft">
-<?php $this->load->view('_footer'); ?>
+<?php $this->load->view('_footer') ?>
 </div>
 </body>
 </html>
