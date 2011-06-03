@@ -60,7 +60,12 @@ if (isset($eid) && $eid != null) { ?>
 			$(function(){
 	
 				// Tabs
-				$('#tabs').tabs();
+				$('#tabs').tabs({ 
+					fx: { 
+						opacity: 'toggle' 
+					},
+					selected: 2
+				});
 				$("#tabs").removeClass("hide");
 	
 			});
