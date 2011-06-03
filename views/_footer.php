@@ -12,4 +12,4 @@
 	&copy; Copyright 2009-<?=date('Y')?> G-LAB.  All rights reserved.
 </div>
 
-<?php if (isset($profile['eid']) && $profile['eid'] == '1')  $this->output->enable_profiler(TRUE); ?>
+<?php if (ENVIRONMENT == 'development')  $this->output->enable_profiler(TRUE); ?>
