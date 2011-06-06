@@ -1,0 +1,6 @@
+[submodule "third_party/glab-ci-ext"]
+	path = third_party/glab-ci-ext
+	url = git@github.com:G-LAB/glab-ci-ext.git
+[submodule "third_party/g-lib"]
+	path = third_party/g-lib
+	url = git@github.com:G-LAB/g-lib.git
