@@ -18,14 +18,27 @@
 |
 | These are the things you can load automatically:
 |
-| 1. Libraries
-| 2. Helper files
-| 3. Plugins
+| 1. Packages
+| 2. Libraries
+| 3. Helper files
 | 4. Custom config files
 | 5. Language files
 | 6. Models
 |
 */
+
+/*
+| -------------------------------------------------------------------
+|  Auto-load Packges
+| -------------------------------------------------------------------
+| Prototype:
+|
+|  $autoload['packages'] = array(APPPATH.'third_party', '/usr/local/shared');
+|
+*/
+
+$autoload['packages'] = array(APPPATH.'third_party/glab-ci-ext', APPPATH.'third_party/g-lib');
+
 
 /*
 | -------------------------------------------------------------------
@@ -51,19 +64,19 @@ $autoload['libraries'] = array('session','database','acl','event','users','notif
 |	$autoload['helper'] = array('url', 'file');
 */
 
-$autoload['helper'] = array('language','url','typography','feed','API','date','twitter','number','snippet','array');
-
-
-/*
-| -------------------------------------------------------------------
-|  Auto-load Plugins
-| -------------------------------------------------------------------
-| Prototype:
-|
-|	$autoload['plugin'] = array('captcha', 'js_calendar');
-*/
-
-$autoload['plugin'] = array();
+$autoload['helper'] = 
+					array(
+						'language',
+						'url', 'glab_url',
+						'typography', 'glab_typography',
+						'feed',
+						'API',
+						'date', 'glab_date', 'glib_date',
+						'twitter',
+						'number', 'glab_number', 'glib_number',
+						'snippet',
+						'array', 'glib_array'
+					);
 
 
 /*
@@ -111,6 +124,5 @@ $autoload['language'] = array('event');
 $autoload['model'] = array('entity','data');
 
 
-
 /* End of file autoload.php */
-/* Location: ./system/application/config/autoload.php */
+/* Location: ./application/config/autoload.php */
