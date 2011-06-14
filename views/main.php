@@ -77,7 +77,7 @@
 	  	$.get('<?=site_url('pbx/call')?>/' + num);
 	  });
 	  
-	  $(".phoneNumber").live('mouseover', function(event) {
+	  $(".vcard .tel .value").live('mouseover', function(event) {
 	  	  if($(this).data('qtip')) return true;
 	  	  $(this).qtip( $.extend(true, {}, tipTemplate, {
 	  			overwrite: false,

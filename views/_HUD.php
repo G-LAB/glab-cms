@@ -16,25 +16,31 @@ if (isset($eid) == true && $eid != null) $HUD = $this->users->getData($eid);
 <?php if (isset($eid) && $eid != null) : ?>
 
 	<?php $this->users->updateHistory($eid) ?>
-
 	<?php $this->load->helper('number') ?>
+	
 	<div id="HUD" class="ui-style">
-		<div id="profile">
+		<div id="profile" class="vcard">
 			<h2>
-				<a href="<?=site_url('profile/view/'.$HUD['eid'])?>"><?=$HUD['name'] ?></a>
+				<a href="<?=site_url('profile/view/'.$HUD['eid'])?>">
+					<span class="<?=($HUD['isCompany'])?'fn org':'fn'?>"><?=$HUD['name'] ?></span>
+				</a>
 			</h2>
 			<div id="col1">
-				<?php if (isset($HUD['address'][0])) : ?>
+				<?php if (count($HUD['address']) > 0) : ?>
 				<ul id="address">
 					<?php foreach (array_slice($HUD['address'],0,3) as $address) : ?>
 					<?php $address['full'] = $address['addr1'].' '.$address['addr2'].' '.$address['city'].' '.$address['state'].' '.$address['zip5'] ?>
-					<li>
-						<h3><?php if ($address['label'] != null) { echo $address['label']; } elseif ($address['type'] == 'm') { echo 'Mailing'; } elseif ($address['type'] == 'o') { echo 'Office'; } elseif ($address['type'] == 'b') { echo 'Billing'; } elseif ($address['type'] == 'h') { echo 'Home'; } ?></h3>
+					<li class="adr">
+						<h3 class="type"><?php if ($address['label'] != null) { echo $address['label']; } elseif ($address['type'] == 'm') { echo 'Mailing'; } elseif ($address['type'] == 'o') { echo 'Office'; } elseif ($address['type'] == 'b') { echo 'Billing'; } elseif ($address['type'] == 'h') { echo 'Home'; } ?></h3>
 						<address>
+							<span class="street-address">
 							<?=preg_replace('/\s/','&nbsp;',$address['addr1']); if ($address['addr2'] == null) { ?><br/><?php } ?> 
-							<?=preg_replace('/\s/','&nbsp;',$address['addr2']); if ($address['addr2'] != null) { ?><br/><?php } ?>
-							<?=$address['city'] ?>, <?=$address['state'] ?> 
-							<?=$address['zip5']; if ($address['zip4'] != null) { ?>-<?=$address['zip4']; } ?>
+							</span>
+							<span class="extended-address">
+								<?=preg_replace('/\s/','&nbsp;',$address['addr2']); if ($address['addr2'] != null) { ?><br/><?php } ?>
+							</span>
+							<span class="locality"><?=$address['city'] ?></span>, <span class="region"><?=$address['state'] ?></span>
+							<span class="postal-code"><?=$address['zip5']; if ($address['zip4'] != null) { ?>-<?=$address['zip4']; } ?></span>
 						</address>
 					</li>
 					<?php endforeach ?>
@@ -46,11 +52,16 @@ if (isset($eid) == true && $eid != null) $HUD = $this->users->getData($eid);
 					<h3>Account Number</h3>
 					<?=acctnum_format($HUD['acctnum']) ?>
 				</div>
-				<?php if (isset($HUD['phone'][0])) : ?>
+				<?php if (count($HUD['phone']) > 0) : ?>
 				<h3>Phone Numbers</h3>
 				<ul id="phone">
 					<?php foreach ($HUD['phone'] as $phone) : ?>
-					<li class="icn phone <?=$this->data->phone($phone['type'],TRUE)?>" title="<?=$this->data->phone($phone['type'])?>"><?=phone_format($phone['num']) ?></li>
+					<li class="icn phone <?=$this->data->phone($phone['type'],TRUE)?>" title="<?=$this->data->phone($phone['type'])?>">
+						<span class="tel">
+							<span class="type hide"><?=$this->data->phone($phone['type'],TRUE)?></span>
+							<span class="value"><?=phone_format($phone['num']) ?></span>
+						</span>
+					</li>
 					<?php endforeach ?>
 				</ul>
 				<?php endif ?>
