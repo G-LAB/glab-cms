@@ -12,7 +12,6 @@ class Web_hosting extends CI_Controller {
 		$this->load->library('plesk');
 		$this->load->library('notification');
 		$this->load->model('hosting');
-		$this->load->helper('server');
 	}
 	
 	function index () {
@@ -42,7 +41,7 @@ class Web_hosting extends CI_Controller {
 		if ($this->input->post('action')) $this->hosting->controlServices($psid, $this->input->post('srv'), $this->input->post('action'));
 		
 		$this->load->library('GoogleGraph');
-		$this->load->helper('file');
+		$this->load->helper('glib_file');
 		
 		$server = $this->hosting->getServerProfile($psid);
 		
@@ -82,8 +81,7 @@ class Web_hosting extends CI_Controller {
 		$offset = $this->input->get('offset');
 		
 		if (!$psid) $psid = 1;
-		
-		$this->load->helper('file');
+
 		$this->load->library('pagination');
 		
 		$accounts = $this->hosting->getCustomers($psid, $offset);
@@ -114,7 +112,7 @@ class Web_hosting extends CI_Controller {
 	function domain ($domain) {
 		
 		$this->load->library('GoogleGraph');
-		$this->load->helper('file');
+		$this->load->helper('glib_file');
 		
 		$domain_data = $this->hosting->getDomain('*',$domain);
 		
