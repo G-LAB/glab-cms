@@ -18,7 +18,7 @@ class HUD extends CI_Controller {
 			
 			$data = array();
 			
-			$query = "SELECT eid, acctnum, CONCAT(companyName, firstName,' ',lastName) as name, CONCAT(companyName, lastName,' ',firstName) as nameSort, companyName, firstName, lastName  FROM `entities` WHERE `companyName` LIKE '%".$search."%'  OR `firstName` LIKE '%".$search."%' OR `lastName` LIKE '%".$search."%' ORDER BY nameSort";
+			$query = "SELECT eid, acctnum, CONCAT(companyName, firstName,' ',lastName) as name, CONCAT(companyName, lastName,' ',firstName) as nameSort, companyName, firstName, lastName  FROM `entities` WHERE `companyName` LIKE '%".$search."%'  OR `firstName` LIKE '%".$search."%' OR `lastName` LIKE '%".$search."%' ORDER BY nameSort LIMIT 5";
 			
 			$query = $this->db->query($query);
 			$query = $query->result_array();
