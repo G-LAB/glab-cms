@@ -317,7 +317,7 @@
 		</script>
 	</div>
 	<div id="subhd">
-		<?=$this->load->view('_HUD', $HUD=null) ?>
+		<?=$this->load->view('_HUD') ?>
 		<div id="HUD_Loading">
 			<div id="progress">
 				Loading...
