@@ -304,7 +304,9 @@
 			  $("#tabmenu").tabs( { collapsible: true, selected: -1 } );
 			  
 			  $("#menu_search_trigger").click( function () {
-			  	$("#searchBox").focus();
+			  	setInterval(function () {
+			  		$("#searchBox").focus();
+			  	},1000);
 			  	$(this).parent().removeClass('ui-state-disabled');
 			  	$(this).parent().addClass('ui-state-active-search');
 			  	$("#tabmenu").tabs( "select" , -1 );
