@@ -33,7 +33,7 @@
 	
 	<h3>In The News...</h3>
 	<?php 
-		$this->load->helper(array('feed','text'));
+		$this->load->helper(array('text'));
 		$feeds[] = 'http://www.456bereastreet.com/feed.xml';
 		$feeds[] = 'http://feeds.mashable.com/Mashable';
 		$feeds[] = 'http://feeds.feedburner.com/nettuts';

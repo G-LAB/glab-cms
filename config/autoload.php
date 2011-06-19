@@ -69,12 +69,12 @@ $autoload['helper'] =
 						'language',
 						'url', 'glab_url',
 						'typography', 'glab_typography',
-						'feed',
-						'API',
+						'glab_feed',
+						'glab_api',
 						'date', 'glab_date', 'glib_date',
-						'twitter',
+						'glib_twitter',
 						'number', 'glab_number', 'glib_number',
-						'snippet',
+						'glab_snippet',
 						'array', 'glib_array'
 					);
 

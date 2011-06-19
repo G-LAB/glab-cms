@@ -77,7 +77,6 @@ class Sales_tools extends CI_Controller {
 		
 		$this->load->library('form_validation');
 		$this->load->library('pagination');
-		$this->load->helper('snippet');
 		$this->load->helper('form');
 		
 		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
