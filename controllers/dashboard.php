@@ -42,7 +42,7 @@ class Dashboard extends CI_Controller {
 		
 		if ($this->twitter->tweet($status));
 		
-		echo $status;
+		echo parse_tweet($status);
 	}
 
 }
