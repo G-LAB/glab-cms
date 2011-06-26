@@ -6,6 +6,7 @@
 
 <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/yui/2.8.0r4/build/reset-fonts/reset-fonts.css"/>
 <link rel="stylesheet" type="text/css" href="<?=assets_url('styles/jquery/jquery-ui-1.8.1.custom.css')?>" />
+<link rel="stylesheet" type="text/css" href="<?=assets_url('js/jquery.qtip2.min.css')?>"/>
 <link rel="stylesheet" type="text/css" href="<?=assets_url('styles/global.css')?>"/>
 <link rel="stylesheet" type="text/css" href="<?=assets_url('styles/backend.css')?>"/>
 
@@ -22,7 +23,7 @@
 <script type="text/javascript" src="<?=assets_url('js/jquery.AutoEllipsis.js')?>"></script>
 <script type="text/javascript" src="<?=assets_url('js/autoresize.jquery.min.js')?>"></script>
 <script type="text/javascript" src="<?=assets_url()?>js/tiny_mce/jquery.tinymce.js"></script>
-<script type="text/javascript" src="<?=assets_url('js/jquery.qtip.min.js')?>"></script>
+<script type="text/javascript" src="<?=assets_url('js/jquery.qtip2.pack.js')?>"></script>
 <script type="text/javascript" src="<?=assets_url('js/jquery.placeholder.js')?>"></script>
 <script type="text/javascript" src="<?=assets_url('js/jquery.jeditable.min.js')?>"></script>
 
@@ -37,22 +38,12 @@
 	  
 	  var tipTemplate = {
 	     overwrite: false,
-	     show: 'mouseover',
-	     hide: 'mouseout',
 	     position: { 
-	     	corner: { 
-	     		tooltip: 'leftMiddle', 
-	     		target: 'rightMiddle' 
-	     	} 
+     		my: 'left center', 
+     		at: 'right center' 
 	     },
 	     style: {
-	       border: {
-	          width: 1,
-	          radius: 5,
-	          color: '#c3c3c3'
-	       },
-	       textAlign: 'center',
-	       tip: true
+	       classes: 'ui-tooltip-light ui-tooltip-rounded ui-tooltip-shadow'
 	     }
 	  };
 	  
@@ -61,11 +52,15 @@
 	  }));
 	  
 	  $('.in_development').qtip( $.extend(true, {}, tipTemplate, {
-	     content: 'Feature coming soon!'
+	     content: {
+	     	text: 'Feature coming soon!'
+	     }
 	  }));
 	  
 	  $('input').placeholder();
+	  
 	  $(".rtrim").addClass("nowrap").autoEllipsis();
+	  
 	  $('textarea.autoResize').autoResize();
 	  
 	  // Phone Number Click-to-Call
@@ -85,10 +80,40 @@
 	                event: event.type,
 	                ready: true
 	            },
-	  			content: 'Click-to-Call'
+	  			content: {
+	  				text: 'Click-to-Call'
+	  			}
 	  	  }), event); //qtip
 	  }); //live 
 	  
+	  $('address').live('mouseover', function(event) {
+	  	  if($(this).data('qtip')) return true;
+	  	  $(this).qtip( $.extend(true, {}, tipTemplate, {
+	  			overwrite: false,
+	  			show: {
+	                event: event.type,
+	                ready: true
+	            },
+	  			hide: { 
+	  				fixed: true 
+	  			},
+	  			content: {
+	  				text: 'Loading...',
+	  				ajax: {
+		  				url: '<?=site_url('ajax/qtip_address')?>',
+		  				data: { 
+		  					address: this.innerText
+		  				},
+		  				method: 'post'
+		  			}
+	  			},
+	  			api: {
+	  				beforeContentUpdate: function () {
+	  					var address = this.elements.target[0].innerText;	
+	  				}
+	  			}
+	  	  }), event); //qtip
+	  }); //live 
 	  
 	  $('textarea.richedit').tinymce({
   			// Location of TinyMCE script
@@ -104,33 +129,8 @@
   			theme_advanced_toolbar_align : "left",
   			theme_advanced_statusbar_location : "bottom",
   			theme_advanced_resizing : false
-  		});
-	  $('address').live('mouseover', function(event) {
-		  if($(this).data('qtip')) return true;
-		  $(this).qtip( $.extend(true, {}, tipTemplate, {
-				overwrite: false,
-				show: {
-	                event: event.type,
-	                ready: true
-	            },
-				hide: { 
-					fixed: true 
-				},
-				content: {
-					text: 'Loading...',
-					url: '<?=site_url('ajax/qtip_address')?>',
-					data: { 
-						address: this.innerText
-					},
-					method: 'post'
-				},
-				api: {
-					beforeContentUpdate: function () {
-						var address = this.elements.target[0].innerText;	
-					}
-				}
-		  }), event); //qtip
-	  }); //live 
+  		}); //tinymce
+  		
 	}); // jQuery.ready
 	
 	// Update HUD
