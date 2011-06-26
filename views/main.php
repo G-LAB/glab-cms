@@ -104,7 +104,7 @@
 		  				data: { 
 		  					address: this.innerText
 		  				},
-		  				method: 'post'
+		  				type: 'GET'
 		  			}
 	  			},
 	  			api: {
