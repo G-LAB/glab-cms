@@ -11,12 +11,11 @@ class HUD extends CI_Controller {
 	
 	function search() {
 		
-		$data['q'] = $_POST['q'];
-		
-		if (isset ($_POST['q']) && $_POST['q'] != null) {
-			$search = $_POST['q'];
+		if ($this->input->get_post('q')) {
 			
 			$data = array();
+			
+			$search = $this->input->get_post('q');
 			
 			$query = "SELECT eid, acctnum, CONCAT(companyName, firstName,' ',lastName) as name, CONCAT(companyName, lastName,' ',firstName) as nameSort, companyName, firstName, lastName  FROM `entities` WHERE `companyName` LIKE '%".$search."%'  OR `firstName` LIKE '%".$search."%' OR `lastName` LIKE '%".$search."%' ORDER BY nameSort LIMIT 5";
 			
@@ -28,13 +27,13 @@ class HUD extends CI_Controller {
 				$data['result']['entities'][] = $entity;
 	
 			}
-		} 
+			
+			$this->load->view('_HUD_search',$data);
+		} else {
+			exit ('No query made on script.');
+		}
 		
-		$this->load->view('_HUD_search',$data);
 		
-		// Update session cookie BREAKS JS CALLS
-		//$dataHUD['HUD'] = $eid;
-		//$this->session->set_userdata($dataHUD);
 	}
 	
 }
