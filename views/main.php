@@ -17,6 +17,10 @@
 <script type="text/javascript">
   // Load jQuery
   google.load("jquery", "1");
+  
+  // Set Variables Needed Later
+  var site_url = '<?=site_url()?>';
+  var assets_url = '<?=assets_url()?>';
 </script>
 <script type="text/javascript" src="<?=assets_url('js/jquery-ui-1.8.13.custom.min.js')?>"></script>
 <script type="text/javascript" src="<?=assets_url('js/jquery.bgiframe.min.js')?>"></script>
@@ -26,146 +30,10 @@
 <script type="text/javascript" src="<?=assets_url('js/jquery.qtip2.pack.js')?>"></script>
 <script type="text/javascript" src="<?=assets_url('js/jquery.placeholder.js')?>"></script>
 <script type="text/javascript" src="<?=assets_url('js/jquery.jeditable.min.js')?>"></script>
+<script type="text/javascript" src="<?=assets_url('js/backend.js')?>"></script>
 
 <?=$this->header->get()?>
 
-<script type="text/javascript">
-	// Hide Loading Message
-	$(document).ready(function() {
-	  
-	  // Hide Loading Message
-	  $('#HUD_Loading').hide();
-	  
-	  var tipTemplate = {
-	     overwrite: false,
-	     position: { 
-     		my: 'left center', 
-     		at: 'right center' 
-	     },
-	     style: {
-	       classes: 'ui-tooltip-light ui-tooltip-rounded ui-tooltip-shadow'
-	     }
-	  };
-	  
-	  $('.tip').qtip( $.extend(true, {}, tipTemplate, {
-	     // No Options, Use Content From Title Attribute
-	  }));
-	  
-	  $('.in_development').qtip( $.extend(true, {}, tipTemplate, {
-	     content: {
-	     	text: 'Feature coming soon!'
-	     }
-	  }));
-	  
-	  $('input').placeholder();
-	  
-	  $(".rtrim").addClass("nowrap").autoEllipsis();
-	  
-	  $('textarea.autoResize').autoResize();
-	  
-	  // Phone Number Click-to-Call
-	  $(".phoneNumber").live('click', function () {
-	  	event.preventDefault();
-	  	alert(	'Your desk phone should ring shortly.\n' + 
-	  			'After you answer you will be connected to ' + $(this).html() + '.' );
-	  	var num = $(this).html();
-	  	$.get('<?=site_url('pbx/call')?>/' + num);
-	  });
-	  
-	  $(".vcard .tel .value").live('mouseover', function(event) {
-	  	  if($(this).data('qtip')) return true;
-	  	  $(this).qtip( $.extend(true, {}, tipTemplate, {
-	  			overwrite: false,
-	  			show: {
-	                event: event.type,
-	                ready: true
-	            },
-	  			content: {
-	  				text: 'Click-to-Call'
-	  			}
-	  	  }), event); //qtip
-	  }); //live 
-	  
-	  $('address').live('mouseover', function(event) {
-	  	  if($(this).data('qtip')) return true;
-	  	  $(this).qtip( $.extend(true, {}, tipTemplate, {
-	  			overwrite: false,
-	  			show: {
-	                event: event.type,
-	                ready: true
-	            },
-	  			hide: { 
-	  				fixed: true 
-	  			},
-	  			content: {
-	  				text: 'Loading...',
-	  				ajax: {
-		  				url: '<?=site_url('ajax/qtip_address')?>',
-		  				data: { 
-		  					address: this.innerText
-		  				},
-		  				type: 'GET'
-		  			}
-	  			},
-	  			api: {
-	  				beforeContentUpdate: function () {
-	  					var address = this.elements.target[0].innerText;	
-	  				}
-	  			}
-	  	  }), event); //qtip
-	  }); //live 
-	  
-	  $('textarea.richedit').tinymce({
-  			// Location of TinyMCE script
-  			script_url : '<?=assets_url('js/tiny_mce/tiny_mce.js')?>',
-  			// General options
-  			theme : "advanced",
-  			plugins : "safari,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,fullscreen",
-  			// Theme options
-  			theme_advanced_buttons1 : "formatselect,bold,italic,underline,strikethrough",
-  			theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,help,code",
-  			theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,media,advhr,|,fullscreen",
-  			theme_advanced_toolbar_location : "top",
-  			theme_advanced_toolbar_align : "left",
-  			theme_advanced_statusbar_location : "bottom",
-  			theme_advanced_resizing : false
-  		}); //tinymce
-  		
-	}); // jQuery.ready
-	
-	// Update HUD
-	function updateHUD (eid) {
-		event.preventDefault();
-		$('html, body').animate({scrollTop:0}, 'slow'); 
-		$("#HUD_Loading").fadeIn("fast",
-			function () {
-				$.get("<?=site_url("HUD/load/") ?>/" + eid, null,
-				  function(data){
-				    $("#HUD").html(data);
-				    $("#HUD_Loading").fadeOut("fast");
-				  });
-			});
-	}
-	
-	// Toggle Menu
-	function toggleMenu () {
-		$("#selectMenu").toggle("blind",null,"slow");		
-	}
-	
-	function searchHUD () {
-		event.preventDefault();
-		$("#cu3er-container").hide();
-		$("#HUD_Loading").fadeIn("fast",
-			function () {
-				var searchQuery = $('#search input').val();
-				$.post("<?=site_url("HUD/search") ?>", { q: searchQuery },
-				  function(data){
-				    $("#HUD").html(data);
-				    $("#HUD_Loading").fadeOut("fast");
-				  });
-			});
-	} 
-</script>
 </head>
 
 <body class="main <?=$this->router->fetch_class()?> <?=$this->router->fetch_method()?>">
