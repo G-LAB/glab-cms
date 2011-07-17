@@ -15,10 +15,12 @@
 	<h2>Helpful Links</h2>
 		<ul class="links">
 			<li><a href="https://login.mailchimp.com/google-apps?domain=glabstudios.com">Mail Chimp</a></li>
+			<li><a href="http://hootsuite.com">HootSuite</a></li>
+			<li><a href="https://glab.signin.aws.amazon.com/console">Amazon AWS Console</a></li>
+			<li><a href="https://github.com/organizations/G-LAB">GitHub Dashboard</a></li>
 			<li><a href="https://webmail.glabstudios.com/">Google Webmail</a></li>
 			<li><a href="https://www.google.com/calendar/hosted/glabstudios.com">Google Calendar</a></li>
-			<li><a href="https://www.google.com/a/glabstudios.com">Google Account Manager</a></li>
-			<li><a href="https://glab.signin.aws.amazon.com/console">Amazon AWS Console</a></li>
+			<li><a href="https://www.google.com/a/glabstudios.com">Google Domain Admin</a></li>
 		</ul>
 </div>
 

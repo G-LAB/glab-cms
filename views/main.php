@@ -153,12 +153,6 @@
 										<p>View and update agreements and contracts.</p>
 									</a>
 								</li>
-								<li id="bar_version_control">
-									<a href="<?=site_url('version_control')?>">
-										<strong>Version Control</strong>
-										<p>View trees, commits, and download code.</p>
-									</a>
-								</li>
 							</ul>
 						</div>
 					</div>
