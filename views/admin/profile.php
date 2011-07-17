@@ -1,6 +1,6 @@
 <?php $this->load->helper('date'); ?>
 <div id="profile" class="mid body">
-	<form action="<?= site_url('admin/profile') ?>" method="post" class="generic">
+	<form action="<?= current_url() ?>" method="post" class="generic">
 		<input type="hidden" name="action" value="update" />
 		
 		<label for="firstName">First Name</label>
@@ -29,8 +29,9 @@
 			<?php $tz = array(	'US/Hawaii'=>'Hawaii', 
 								'US/Pacific'=>'Pacific', 
 								'US/Mountain'=>'Mountain',
+								'US/Central'=>'Central',
 								'US/Eastern'=>'Eastern',
-								'GMT'=>'Greenwich Mean Time');
+								'UTC'=>'UTC/GMT (Coordinated Universal Time)');
 			foreach ($tz as $tzid=>$zone) : ?>
 			<option value="<?=$tzid?>" <?php if ($prefs['timezone'] == $tzid): ?>selected="selected"<?php endif; ?>><?=$zone?></option>
 			<?php endforeach; ?>
