@@ -18,9 +18,21 @@
 			<li><a href="http://hootsuite.com">HootSuite</a></li>
 			<li><a href="https://glab.signin.aws.amazon.com/console">Amazon AWS Console</a></li>
 			<li><a href="https://github.com/organizations/G-LAB">GitHub Dashboard</a></li>
+		</ul>
+		
+		<h3>Google Web Services</h3>
+		<ul class="links">
 			<li><a href="https://webmail.glabstudios.com/">Google Webmail</a></li>
 			<li><a href="https://www.google.com/calendar/hosted/glabstudios.com">Google Calendar</a></li>
 			<li><a href="https://www.google.com/a/glabstudios.com">Google Domain Admin</a></li>
+		</ul>
+		
+		<h3>Web Hosting Management</h3>
+		<ul class="links">
+			<li><a href="https://dv2.glabstudios.net:8443/">Parallels Plesk Panel</a></li>
+			<li><a href="https://dv2.glabstudios.net:4643/">Parallels Power Panel</a></li>
+			<li><a href="http://dv2.glabstudios.net:2812/">Monit Server Monitoring</a></li>
+			<li><a href="https://ac.mediatemple.net/">MediaTemple (mt) Account Center</a></li>
 		</ul>
 </div>
 
