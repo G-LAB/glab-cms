@@ -7,3 +7,6 @@
 [submodule "third_party/glab-ci-ext2"]
 	path = third_party/glab-ci-ext2
 	url = git@github.com:G-LAB/glab-ci-ext.git
+[submodule "third_party/glab-api-kit"]
+	path = third_party/glab-api-kit
+	url = git@github.com:G-LAB/glab-api-kit.git
