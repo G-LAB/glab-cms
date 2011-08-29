@@ -20,9 +20,6 @@ class Dashboard extends CI_Controller {
 		
 		// COUNTS FOR GRID
 		$body['grid']['count']['comm'] = $this->ticketman->getCount();
-		
-		$body['lastLogin'] = $this->entity->lastLogin();
-		 
 		 
 		$data['content']['body'] = $this->load->view('dashboard', $body, true);
 		$data['content']['side'] = $this->load->view('_sidebar', null, true);
@@ -32,17 +29,10 @@ class Dashboard extends CI_Controller {
 	
 	function ajax () {
 		$this->load->library('Asterisk');
-		$data['vmCount'] = $this->asterisk->getVMCount();
+		$profile = $this->profile->current();
+		$data['vmCount'] = $this->asterisk->getVMCount($profile->meta->pbx_ext_mbox);
+		$data['vmExt'] = $profile->meta->pbx_ext_mbox;
 		echo json_encode($data);
-	}
-
-	function ajax_socialpost () {
-		
-		$status = $this->input->post('value');
-		
-		if ($this->twitter->tweet($status));
-		
-		echo parse_tweet($status);
 	}
 
 }
