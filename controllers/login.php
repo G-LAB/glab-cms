@@ -11,8 +11,7 @@ class Login extends CI_Controller {
 	
 	function index()
 	{	
-		
-		if ($this->session->userdata('eid')) redirect('dashboard');
+		if ($this->acl->is_auth() == true) redirect('dashboard');
 		$this->session->sess_destroy();
 		$data['pageTitle'] = 'Authorized Users Only';
 		
@@ -57,17 +56,15 @@ class Login extends CI_Controller {
 		}
 		
 		// Run Validation Actions
-		if ($this->form_validation->run() == FALSE) {
-			if ($this->input->post('action')=='validate_yubikey') $data['content']['body'] = $this->load->view('login/yubikey', null, true);
-			elseif ($this->input->post('action')=='validate_login') $data['content']['body'] = $this->load->view('login/override', null, true);
-		} 
-		
-		// Override Session Start as Ryan
-		elseif ($this->form_validation->run() == TRUE && $this->input->post('action')=='validate_login') {
-			$this->users->updateSession('1');
+		if ($this->form_validation->run() === true) 
+		{
 			redirect('dashboard');
 		}
-		else die('Error.');
+		else 
+		{
+			if ($this->input->post('action')=='validate_yubikey') $data['content']['body'] = $this->load->view('login/yubikey', null, true);
+			elseif ($this->input->post('action')=='validate_login') $data['content']['body'] = $this->load->view('login/override', null, true);
+		}
 		
 		// Present Override Login Screen
 		if ($this->input->post('otp')=='override') $data['content']['body'] = $this->load->view('login/override', null, true);
@@ -78,41 +75,63 @@ class Login extends CI_Controller {
 
 	function checkPassword ($password) 
 	{
-		if ( md5($password) == '252e4070b283d26df477ba7c76bc5d36') return TRUE;
-		else {
+		if ( md5($password) == '252e4070b283d26df477ba7c76bc5d36') 
+		{
+			$this->acl->create_session(1262217600);
+			return true;
+		}
+		else 
+		{
 			$this->form_validation->set_message('checkPassword', 'Login incorrect.');
-			return FALSE;
+			return false;
 		}
 	}
 	
 	function validateYubikey ($otp)
 	{
-		if ($otp == 'override') return true;
-		else {
-			// Check for Key in DB
-			$keymatch = substr($otp, 0, 12);
-			$this->db->join('yubikeys y','y.ykid = a.ykid');
-			$query = $this->db->get_where('entities_admin a','y.keymatch = \''.$keymatch.'\'');
+		if ($otp == 'override') 
+		{
+			return true;
+		}
+		else 
+		{
+			$this->load->library('Auth_Yubico',array());
+			$this->load->config('auth');
 			
-			$user = $query->row_array();
+			$yubico = new Auth_Yubico(config_item('auth_yubico_id'),config_item('auth_yubico_key'),true);
+			
+			// Break OTP Into Parts
+			$parts = $yubico->parsePasswordOTP($otp);
+			
+			// Decode ModHex Prefix to YKID
+			$ykid = element('prefix',$parts);
+			
+			// Query DB for exsistence
+			// NOTE: Does not check if key has permissions currently.
+			$data = $this->db->limit(1)->get_where('auth_mf_yubikey',array('ykid'=>$ykid));
 			
 			// Return False if Key Not Found
-			if ($query->num_rows() != 1) {
+			if ($data->num_rows() != 1) 
+			{
 				$this->form_validation->set_message('validateYubikey', 'Yubikey not linked to user account.');
 				return false;
-			
+			}
 			// If Key Found, Validate with Yubico
-			} else {
-				$this->load->library('yubikey');
-				
-				if ($this->yubikey->validate($otp)) {
-					$this->users->updateSession($user['eid']);
-					$this->event->log('admin_login');
-					redirect('dashboard');
-					return TRUE;
-				} else {
-					$this->form_validation->set_message('validateYubikey', 'Yubico declined key: '.$this->yubikey->status);
-					return FALSE;
+			else 
+			{ 
+				$response = $yubico->verify($otp);
+				if ($response === true) 
+				{	
+					$pid = $data->row()->owner;
+					$this->acl->create_session($pid);
+					$this->event->log('auth_success',$pid);
+					return true;
+				} 
+				else 
+				{
+					$this->form_validation->set_message('validateYubikey', 'Yubico declined key ('.$response->message.').');
+					$this->event->log('auth_failure_mf_yubikey',false,array('error'=>$response->message));
+					return false;
 				}
 			}
 			
