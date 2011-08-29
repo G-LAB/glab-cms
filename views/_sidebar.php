@@ -87,7 +87,7 @@
 <script type="text/javascript">
 
  $(document).ready(function() {
-    $('#post_content').editable('<?=site_url('dashboard/ajax_socialpost')?>',{
+    $('#post_content').editable('<?=site_url('ajax/socialpost')?>',{
 		type: 'textarea',
 		data : "\b",
 		submit: 'Send Update',
