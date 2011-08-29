@@ -10,6 +10,7 @@ class Users
 {
 
 	function getData ($eid, $getExtended=TRUE, $getPrefs=FALSE, $getAdmin=FALSE) {
+		trigger_error('The CMS user library has been depreciated, use the profile model instead.',E_USER_DEPRECATED);
 		$CI =& get_instance();
 		$CI->load->database();
 		
