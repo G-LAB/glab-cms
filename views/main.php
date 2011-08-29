@@ -160,26 +160,13 @@
 			</div>
 			<div id="menu_search"></div>
 		</div>
-		<script type="text/javascript">
-			$(document).ready(function() {
-			  
-			  $("#tabmenu").tabs( { collapsible: true, selected: -1 } );
-			  
-			  $("#menu_search_trigger").click( function () {
-			  	setInterval(function () {
-			  		$("#searchBox").focus();
-			  	},1000);
-			  	$(this).parent().removeClass('ui-state-disabled');
-			  	$(this).parent().addClass('ui-state-active-search');
-			  	$("#tabmenu").tabs( "select" , -1 );
-			  	event.preventDefault();
-			  });
-			  
-			});
-		</script>
 	</div>
 	<div id="subhd">
-		<?=$this->load->view('_HUD') ?>
+		<div id="HUD" class="ui-style">
+			<pre>
+				<?=var_dump($this->hud->history_get())?>
+			</pre>
+		</div>
 		<div id="HUD_Loading">
 			<div id="progress">
 				Loading...
@@ -189,7 +176,12 @@
 	</div>
 </div>
 <div id="user">
-	<?php $this->load->view('_userhud') ?>
+	<?php if ($this->acl->is_auth()) : ?>
+	<ul>
+		<li id="UserName"><?=greeting().', '.$this->profile->current()->name->friendly?></li>
+		<li id="Logout"><a href="<?=site_url("login/destroy")?>"><span>Logout</span></a></li>
+	</ul>
+	<?php endif; ?>
 </div>
 <div id="bd" class="fancy_corners">
 	<div id="bd-inner">
