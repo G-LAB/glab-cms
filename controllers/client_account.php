@@ -1,9 +1,9 @@
 <?php
 
-class Profile extends CI_Controller {
+class Client_account extends CI_Controller {
 	
 	function index() {
-		redirect('profile/create');
+		redirect('client_account/create');
 	}
 	
 	function view($eid) {
@@ -63,7 +63,7 @@ class Profile extends CI_Controller {
 			
 			$console['header'] = null;
 		
-			$console['body'] = $this->load->view('profile/view', array('profile'=>$profile, 'accounts'=>$accounts, 'action'=>$action, 'success'=>$success), TRUE);
+			$console['body'] = $this->load->view('client_account/view', array('profile'=>$profile, 'accounts'=>$accounts, 'action'=>$action, 'success'=>$success), TRUE);
 			
 			$console['footer_lt'] = null;
 			$console['footer_rt'] = null;
@@ -92,8 +92,8 @@ class Profile extends CI_Controller {
 		
 		if ($this->form_validation->run()==TRUE) {
 			$this->load->library('users');
-			redirect('profile/view/'.$this->users->createEntity());
-		} else $data['content']['body'] = $this->load->view('profile/create', $data, true);
+			redirect('client_account/view/'.$this->users->createEntity());
+		} else $data['content']['body'] = $this->load->view('client_account/create', $data, true);
 		
 		$data['content']['side'] = $this->load->view('_sidebar', null, true);
 		
