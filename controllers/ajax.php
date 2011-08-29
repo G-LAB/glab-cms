@@ -8,6 +8,15 @@ class Ajax extends CI_Controller {
 		
 	}
 	
+	function socialpost () {
+		
+		$status = $this->input->post('value');
+		
+		if ($this->twitter->tweet($status));
+		
+		echo parse_tweet($status);
+	}
+	
 	function qtip_address () {
 		
 		$data['address'] = $this->input->get('address');
