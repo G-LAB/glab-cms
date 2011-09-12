@@ -2,10 +2,10 @@
 	<?php foreach ($data as $call): ?>
 	<div class="mid body">
 		<?php if (isset($call['entity'])) : ?>
-		<h4><input type="radio" name="caller" value="<?=htmlspecialchars($call['entity']['formvalue'])?>" <?php if ($call['entity']['isCompany']): ?>disabled="disabled"<?php endif;?>/> <?=entity_link($call['entity']['eid'])?></h4>
+		<h4><input type="radio" name="caller" value="<?=htmlspecialchars($call['entity']['formvalue'])?>" <?php if ($call['entity']['isCompany']): ?>disabled="disabled"<?php endif;?>/> <?=profile_link($call['entity']['eid'])?></h4>
 		<ul class="caller_data">
 			<li class="phone"><?=phone_format($call['CallerIDNum'],FALSE)?></li>
-			<li class="acctnum"><?=entity_link($call['entity']['eid'],acctnum_format($call['entity']['acctnum']))?></li>
+			<li class="acctnum"><?=acctnum_format($call['entity']['acctnum'])?></li>
 			<li class="wait"><?=timespan(0,$call['Seconds'])?></li>
 			<?php if (is_array($call['subentities'])) : ?><li class="users"><?=count($call['subentities'])?> Authorized Users</li><?php endif; ?>
 		</ul>
@@ -13,7 +13,7 @@
 		<?php if (isset($call['subentities']) && is_array($call['subentities'])) : ?>
 		<ul class="subentities">
 		<?php foreach ($call['subentities'] as $se) : ?>
-			<li><input type="radio" name="caller" value="<?=htmlspecialchars($se['formvalue'])?>"/> <?=entity_link($se['eid'],$se['name'])?></li>
+			<li><input type="radio" name="caller" value="<?=htmlspecialchars($se['formvalue'])?>"/> <?=profile_link($se['eid'])?></li>
 		<?php endforeach; ?>
 		</ul>
 		<?php endif; ?>

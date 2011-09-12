@@ -21,7 +21,7 @@
 	<?php foreach ($orders as $order) : ?>
 			<tr>
 				<td><a href="<?=site_url('billing/order/'.element('orid',$order))?>"><strong><?=element('orid',$order)?></strong></a></td>
-				<td><?=entity_link(element('eid',$order))?></td>
+				<td><?=profile_link(element('eid',$order))?></td>
 				<td><?=date_user(strtotime(element('tsCreated',$order)))?></td>
 				<td class="status <?=element('status',$order)?>"><?=humanize(element('status',$order))?></td>
 				<td class="justr">

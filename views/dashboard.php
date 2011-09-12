@@ -2,15 +2,19 @@
 	<ul id="grid">
 		<li class="envelope_front">
 			<a href="<?php echo site_url('communication') ?>">Communication
-				<span class="count"><?=$grid['count']['comm']?> Active</span>
+				<span id="tikCount" class="count">Loading...</span>
 			</a>
 		</li>
-		<li class="briefcase"><a href="<?php echo site_url('documents') ?>">Documents</a></li>
+		<li class="briefcase">
+			<a href="<?php echo site_url('documents') ?>">Documents
+				<span id="docCount" class="count">Loading...</span>
+			</a>
+		</li>
 		<li class="calculator"><a href="<?php echo site_url('finance') ?>">Finances</a></li>
 		<li class="calendar"><a href="<?php echo site_url('projects') ?>">Projects</a></li>
 		<li class="vm">
 			<a href="http://pbx.glabstudios.net/recordings">Voicemail
-				<span id="vmCount" class="count">Loading..</span>
+				<span id="vmCount" class="count">Loading...</span>
 			</a>
 		</li>
 		<li class="settings"><a href="<?php echo site_url('admin/settings') ?>">My Settings</a></li>
@@ -72,10 +76,18 @@
 		// Tabs
 		$('#box_rss').tabs({ selected: <?=rand(0,count($rss)-1)?> });
 		
-		// Update VM Count
-		$.getJSON('<?=site_url('dashboard/ajax')?>', function(data) {
-		  $('#vmCount').html(data.vmCount + ' New');
-		});
+		// Update Counts
+		function update_counts () {
+			$.getJSON('<?=site_url('dashboard/ajax')?>', function(data) {
+			  $('#docCount').html(data.docCount + ' Faxes');
+			  $('#tikCount').html(data.tikCount + ' Active');
+			  $('#vmCount').html(data.vmCount + ' New');
+			});
+		}
+		setInterval(function () {
+			update_counts();
+		}, 60000);
+		update_counts();
 		
 		// Show Chrome Message, If Applicable
 		if (window.chrome && window.chrome.app && window.chrome.app.isInstalled==false) {

@@ -27,12 +27,28 @@
 			<li><a href="https://www.google.com/a/glabstudios.com">Google Domain Admin</a></li>
 		</ul>
 		
-		<h3>Web Hosting Management</h3>
+		<h3>Server Management</h3>
+		<ul class="links">
+			<li><a href="https://ac.mediatemple.net/">MediaTemple (mt) Account Center</a></li>
+		</ul>
+		<h4 class="toggle_sibbling">db1.glabstudios.net</h4>
+		<ul class="links">
+			<li><a href="https://db1.glabstudios.net:4643/">Parallels Power Panel</a></li>
+			<li><a href="http://db1.glabstudios.net:2812/">Monit Server Monitoring</a></li>
+			<li><a href="http://db1.glabstudios.net/.munin">Munin Server Monitoring</a></li>
+		</ul>
+		<h4 class="toggle_sibbling">dv2.glabstudios.net</h4>
 		<ul class="links">
 			<li><a href="https://dv2.glabstudios.net:8443/">Parallels Plesk Panel</a></li>
 			<li><a href="https://dv2.glabstudios.net:4643/">Parallels Power Panel</a></li>
 			<li><a href="http://dv2.glabstudios.net:2812/">Monit Server Monitoring</a></li>
-			<li><a href="https://ac.mediatemple.net/">MediaTemple (mt) Account Center</a></li>
+			<li><a href="http://dv2.glabstudios.net/.munin">Munin Server Monitoring</a></li>
+		</ul>
+		<h4 class="toggle_sibbling">pbx.glabstudios.net</h4>
+		<ul class="links">
+			<li><a href="http://pbx.glabstudios.net/">PBX in a Flash</a></li>
+			<li><a href="http://pbx.glabstudios.net:2812/">Monit Server Monitoring</a></li>
+			<li><a href="http://pbx.glabstudios.net/.munin">Munin Server Monitoring</a></li>
 		</ul>
 </div>
 
@@ -62,14 +78,6 @@
 		<tr>
 			<td>Conference Call</td>
 			<td class="justr"><a href="#" class="phoneNumber">200</a></td>
-		</tr>
-		<tr>
-			<td>Block Last Caller</td>
-			<td class="justr"><a href="#" class="phoneNumber">*32</a></td>
-		</tr>
-		<tr>
-			<td>Directory Assistance</td>
-			<td class="justr"><a href="#" class="phoneNumber">9411</a></td>
 		</tr>
 	</table>
 </div>

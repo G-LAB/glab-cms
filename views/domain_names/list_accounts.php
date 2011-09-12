@@ -1,7 +1,7 @@
 <div id="domain_accounts">
 	<?php if (isset($data) && is_array($data)) foreach ($data as $eid=>$domains): ?>
 	<div class="body mid">
-		<h4><?=entity_link($eid)?></h4>
+		<h4><?=profile_link($eid)?></h4>
 		
 		<table>
 			<thead>

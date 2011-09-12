@@ -17,7 +17,7 @@
 			<td></td>
 		</tr>
 		<tr>
-			<td><?=entity_link($entry['eidCreated'])?></td>
+			<td><?=profile_link($entry['eidCreated'])?></td>
 			<td class="cr"><?=$entry['cracc'] ?></td>
 			<td></td>
 			<td class="justr"><?=number_format($entry['amount'],2) ?></td>

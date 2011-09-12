@@ -10,8 +10,8 @@
 	<div class="mid body grid clearfix">
 		<div><strong>Order Number</strong><?=$orid?></div>
 		<div><strong>Date Created</strong><?=date_user(strtotime($order['tsCreated']))?></div>
-		<div><strong>Client Account</strong><?=entity_link($order['eid'])?></div>
-		<div><strong>Prepared By</strong><?=entity_link($order['eidCreated'])?></div>
+		<div><strong>Client Account</strong><?=profile_link($order['eid'])?></div>
+		<div><strong>Prepared By</strong><?=profile_link($order['eidCreated'])?></div>
 		<div><strong>Order Status</strong><?=humanize($order['status'])?></div>
 	</div>
 	<div class="mid header">

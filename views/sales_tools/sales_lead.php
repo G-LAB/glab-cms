@@ -101,7 +101,7 @@
 	<?php endif; ?>
 	<button id="btnAddNote<?=$lead['ldid']?>" class="floatr btnAddNote">Add Note to <?=$lead['companyName']?></button>
 	<p>
-		<strong>Submitted:</strong> <?=date_user(strtotime($lead['tsCreated']))?> by <?=entity_link($lead['eidCreated'])?>
+		<strong>Submitted:</strong> <?=date_user(strtotime($lead['tsCreated']))?> by <?=profile_link($lead['eidCreated'])?>
 	</p>
 	
 	<form action="<?=$_SERVER["REQUEST_URI"]?>" method="post">
@@ -130,7 +130,7 @@
 			<?php foreach ($lead['notes_list'] as $note) : ?>
 			<tr>
 				<td><?=date_user(strtotime($note['tsCreated']))?></td>
-				<td><?=entity_link($note['eid'])?></td>
+				<td><?=profile_link($note['eid'])?></td>
 				<td><?=auto_typography(auto_link($note['note'],'url'))?></td>
 			</tr>
 			<?php endforeach; ?>

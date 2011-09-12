@@ -167,7 +167,7 @@
 			<div>
 				<div class="pbar onSchedule<?=$project['onSchedule']?>"></div>
 				<span class="label">Account: </span>
-							<?=entity_link($project['eid'],$project['entity_name'],'G LAB',true)?> 
+							<?=profile_link($project['eid'])?> 
 				<span class="label">Schedule: </span>	
 							<?php
 								if (isset($project['tsDue'])) {

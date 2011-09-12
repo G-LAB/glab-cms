@@ -37,7 +37,11 @@
 |
 */
 
-$autoload['packages'] = array(APPPATH.'third_party/glab-ci-ext', APPPATH.'third_party/g-lib');
+$autoload['packages'] = array(
+		APPPATH.'third_party/glab-api-kit', 
+		APPPATH.'third_party/glab-ci-ext', 
+		APPPATH.'third_party/g-lib'
+);
 
 
 /*
@@ -52,7 +56,7 @@ $autoload['packages'] = array(APPPATH.'third_party/glab-ci-ext', APPPATH.'third_
 |	$autoload['libraries'] = array('database', 'session', 'xmlrpc');
 */
 
-$autoload['libraries'] = array('session','database','acl','event','users','notification','header','twitter','Yelp');
+$autoload['libraries'] = array('session','database','ACL','users','notification','header','twitter','Yelp','HUD');
 
 
 /*
@@ -74,7 +78,7 @@ $autoload['helper'] =
 						'date', 'glab_date', 'glib_date',
 						'glib_twitter',
 						'number', 'glab_number', 'glib_number',
-						'glab_snippet',
+						'snippet', 'glab_snippet',
 						'array', 'glib_array'
 					);
 
@@ -121,7 +125,7 @@ $autoload['language'] = array('event');
 |
 */
 
-$autoload['model'] = array('entity','data');
+$autoload['model'] = array('entity','data','event','profile');
 
 
 /* End of file autoload.php */

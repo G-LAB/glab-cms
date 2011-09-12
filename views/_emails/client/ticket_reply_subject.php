@@ -1,1 +1,1 @@
-Re: {{tikid}} {subject}
+{subject}

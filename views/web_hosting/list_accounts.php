@@ -1,7 +1,7 @@
 <div id="hosting_accounts">
 	<?php if (isset($accounts) && is_array($accounts)) foreach ($accounts as $account): ?>
 	<div class="body mid">
-		<h4><?=entity_link($account['eid'])?></h4>
+		<h4><?=profile_link($account['eid'])?></h4>
 		
 		<table>
 			<thead>
