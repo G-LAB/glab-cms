@@ -37,9 +37,9 @@
 $active_group = "cms";
 $active_record = TRUE;
 
-$db['cms']['hostname'] = "localhost";
-$db['cms']['username'] = "admin_glab_cms_d";
-$db['cms']['password'] = "Qm5dc1qzwQYtHb";
+$db['cms']['hostname'] = "db1.glabstudios.net";
+$db['cms']['username'] = "glab_cms_dev";
+$db['cms']['password'] = "eEz3QpD4NtT";
 $db['cms']['database'] = "admin_glab_cms_dev";
 $db['cms']['dbdriver'] = "mysql";
 $db['cms']['dbprefix'] = "";

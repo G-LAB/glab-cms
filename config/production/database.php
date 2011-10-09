@@ -37,10 +37,10 @@
 $active_group = "cms";
 $active_record = TRUE;
 
-$db['cms']['hostname'] = "localhost";
-$db['cms']['username'] = "glab_cms";
-$db['cms']['password'] = "fWGe6T8XjZAZXb";
-$db['cms']['database'] = "glab_cms";
+$db['cms']['hostname'] = "db1.glabstudios.net";
+$db['cms']['username'] = "glab_cms_prod";
+$db['cms']['password'] = "BW72uPRhjcX";
+$db['cms']['database'] = "admin_glab_cms_production";
 $db['cms']['dbdriver'] = "mysql";
 $db['cms']['dbprefix'] = "";
 $db['cms']['pconnect'] = TRUE;
