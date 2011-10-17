@@ -10,7 +10,7 @@ function profile_link($profile,$friendly=false)
 		// Return HTML
 		if ($profile->exists() === true) 
 		{
-			$html = '<a href="'.site_url('profile/view/'.$profile->pid_hex).'" onclick="updateHUD('.$profile->pid_hex.')">';
+			$html = '<a href="'.site_url('client_account/view/'.$profile->pid_hex).'" onclick="updateHUD('.$profile->pid_hex.')">';
 			
 			if ($friendly === true) {
 				$html.= $profile->name->friendly;
