@@ -41,7 +41,7 @@
 				<?php foreach ($contact['phone'] as $phone) : ?>
 					<li>
 						<span class="label"><?php echo $phone['label'] ?></span>
-						<?php echo phone_format($phone['num']); ?>
+						<?php echo tel_format($phone['num']); ?>
 					</li>
 				<?php endforeach; ?>
 			</ul>

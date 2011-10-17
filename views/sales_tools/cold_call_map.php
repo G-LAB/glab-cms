@@ -35,7 +35,7 @@
 			
 			<strong><?=$biz['name']?></strong>
 			<address><?=$biz['addr']?><br/><?=$biz['city']?>, <?=$biz['state']?></address>
-			<p class="phone"><?=phone_format($biz['phone'])?></p>
+			<p class="phone"><?=tel_format($biz['phone'])?></p>
 			<p class="url"><a href="<?=$biz['url']?>"><?=ellipsize($biz['url'],45,1)?></a></p>
 			<p class="cats"><?=$biz['cats']?></p>
 			<?php else : ?>

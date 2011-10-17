@@ -22,7 +22,7 @@
 			<p>
 				Opened <?=date_relative(strtotime($tik['timestamp'])) ?> 
 				by <strong>	<?php 	if (element('pid',$tik) == true) echo profile_link(element('pid',$tik),element('name',$tik)); 
-									elseif ($tik['type'] == 'p') echo phone_format($tik['source']); 
+									elseif ($tik['type'] == 'p') echo tel_format($tik['source']); 
 									else echo $tik['source']; ?>
 				</strong>.</p>
 		</div>

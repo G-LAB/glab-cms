@@ -23,7 +23,7 @@
 			<select name="c_phone" class="otheropt">
 				<option disabled="disabled">Select One</option>
 				<option>No Company Phone</option>
-				<option value="<?=$data['phone']?>"><?=phone_format($data['phone'],FALSE)?></option>
+				<option value="<?=$data['phone']?>"><?=tel_format($data['phone'],FALSE)?></option>
 				<option value="other">Other</option>
 			</select><br/>
 			<input type="text" name="c_phone_other" value="<?=set_value('c_phone_other')?>" class="hide"/>
@@ -70,7 +70,7 @@
 				<select name="p_phone" class="otheropt">
 					<option disabled="disabled">Select One</option>
 					<option>No Personal Phone</option>
-					<option value="<?=$data['phone']?>"><?=phone_format($data['phone'],FALSE)?></option>
+					<option value="<?=$data['phone']?>"><?=tel_format($data['phone'],FALSE)?></option>
 					<option value="other">Other</option>
 				</select><br/>
 				<input type="text" name="p_phone_other" value="<?=set_value('p_phone_other')?>" class="hide"/>

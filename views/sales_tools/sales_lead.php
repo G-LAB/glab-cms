@@ -63,7 +63,7 @@
 	<h5>Contact Information</h5>
 	<p>
 		<?php if($lead['phone'] != null): ?>
-		<strong>Phone:</strong> <?=phone_format($lead['phone'])?><br/>
+		<strong>Phone:</strong> <?=tel_format($lead['phone'])?><br/>
 		<?php endif; ?>
 		
 		<?php if($lead['email'] != null): ?>

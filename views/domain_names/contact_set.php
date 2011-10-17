@@ -11,6 +11,6 @@
 		<span class="locality"><?=$city?></span>, <span class="region"><?=$state?></span>  <span class="postal-code"><?=$postal_code?></span><br/>
 	</address><br/><br/>
 	
-	<span class="tel"><span class="value"><?=phone_format($phone)?></span></span><br/>
-	<?php if ($fax): ?><span class="tel"><span class="type hide">Fax</span><span class="value"><?=phone_format($fax)?></span></span><br/><?php endif; ?>
+	<span class="tel"><span class="value"><?=tel_format($phone)?></span></span><br/>
+	<?php if ($fax): ?><span class="tel"><span class="type hide">Fax</span><span class="value"><?=tel_format($fax)?></span></span><br/><?php endif; ?>
 </span>
