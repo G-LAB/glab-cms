@@ -61,7 +61,7 @@
 			<?php foreach($feed->channel->item as $item) : ?>
 				<li>
 					<a href="<?=$item->link ?>" class="headline"><?=$item->title ?></a>
-					<div class="date"><?=strtoupper(date('l \a\t g:i a T',strtotime($item->pubDate))) ?></div>
+					<?php if (empty($item->pubDate) !== true) : ?><div class="date">Published <?=date_relative($item->pubDate)?></div><?php endif; ?>
 					<div class="summary"><?=word_limiter(strip_tags($item->description,'<p>'),50) ?></div>
 				</li>
 			<?php endforeach; ?>
