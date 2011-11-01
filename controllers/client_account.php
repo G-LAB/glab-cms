@@ -6,65 +6,90 @@ class Client_account extends CI_Controller {
 		redirect('client_account/create');
 	}
 	
-	function view($eid) {
+	function view($profile) {
 		$this->load->helper(array('number','form'));
 		$this->load->library('form_validation');
-		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
+		$this->form_validation->set_error_delimiters('<div class="msg error">', '</div>');
 		
 		$action = $this->input->post('action');
 		
+		$profile = $this->profile->get($profile);
+
 		// Status OK
 		$success = TRUE;
 		
 		if ($action) {
+			$this->load->helper('glib_validation');
+			
 			// Validation
 			if ($action == 'add_email') {
-				$this->form_validation->set_rules('email', 'Email Address', 'required|valid_email');
+				$this->form_validation->set_rules('email', 'Email Address', 'required|is_email');
 				
 				// Check for errors
 				$success = $this->form_validation->run();
 				
-				if ($success) $this->entity->addEmail($eid,$this->input->post('email'));
-				
+				if ($success) 
+				{
+					$profile->email->add($this->input->post('email'));
+				}
 				
 			} elseif ($action == 'add_phone') {
-				$this->form_validation->set_rules('phone', 'Phone Number', 'required|numeric|min_length[10]');
+				$this->form_validation->set_rules('type', 'Phone Number Type', 'trim');
+				$this->form_validation->set_rules('label', 'Label', 'trim');
+				$this->form_validation->set_rules('tel', 'Phone Number', 'required|is_tel|tel_format');
 				
 				// Check for errors
 				$success = $this->form_validation->run();
 				
-				if ($success) $this->entity->addPhone($eid,$this->input->post('phone'),$this->input->post('type'),$this->input->post('label'));
+				if ($success) 
+				{
+					$tel = $profile->tel->prototype();
+
+					$tel->type 	= $this->input->post('type');
+					$tel->label = $this->input->post('label');
+					$tel->tel 	= $this->input->post('tel');
+
+					$tel->save();
+				}
 				
 			} elseif ($action == 'add_address') {
-				$this->form_validation->set_rules('addr1', 'Street Address', 'required');
-				$this->form_validation->set_rules('city', 'City', 'required');
-				$this->form_validation->set_rules('state', 'State', 'required|alpha');
-				$this->form_validation->set_rules('zip', 'Zip Code', 'required|numeric|min_length[5]|max_length[9]');
+				$this->form_validation->set_rules('type', 'Address Type', 'trim');
+				$this->form_validation->set_rules('label', 'Label', 'trim');
+				$this->form_validation->set_rules('street1', 'Street Address', 'required|trim');
+				$this->form_validation->set_rules('street2', 'Street Address 2', 'trim');
+				$this->form_validation->set_rules('city', 'City', 'required|trim');
+				$this->form_validation->set_rules('state', 'State', 'required|trim');
+				$this->form_validation->set_rules('zip', 'Postal Code', 'required|trim');
+				$this->form_validation->set_rules('country', 'Country', 'required');
 				
 				// Check for errors
 				$success = $this->form_validation->run();
 				
-				if ($success) $this->entity->addAddress($eid,$_POST);
+				if ($success) 
+				{
+					$address = $profile->address->prototype();
+
+					$address->type 		= $this->input->post('type');
+					$address->label 	= $this->input->post('label');
+					$address->street1 	= $this->input->post('street1');
+					$address->street2 	= $this->input->post('street2');
+					$address->city 		= $this->input->post('city');
+					$address->state 	= $this->input->post('state');
+					$address->zip 		= $this->input->post('zip');
+					$address->country	= $this->input->post('country');
+
+					$address->save();
+				}
 			}
 		}
 		
-		$profile = $this->users->getData($eid);
-		
-		if ($profile) {
+		if ($profile->exists()) {
 			
-			$this->users->updateHistory($eid);
+			$data['pageTitle'] = $profile->name->full;
+			$data['content']['nav']['title'] = $profile->name->friendly;
 			
-			$data['pageTitle'] = $profile['name'];
-			$data['content']['nav']['title'] = $profile['name'];
-			
-			$accounts[] = $profile;
-			if ($profile['isCompany'] == '0') foreach($this->users->getCompaniesByEntity($eid) as $acct) $accounts[] = $acct;
-			else foreach($this->users->getPeopleByEntity($eid) as $acct) $accounts[] = $acct;
-			
-			$console['header'] = null;
-		
-			$console['body'] = $this->load->view('client_account/view', array('profile'=>$profile, 'accounts'=>$accounts, 'action'=>$action, 'success'=>$success), TRUE);
-			
+			$console['header'] = "Account No: ".acctnum_format($profile->pid);
+			$console['body'] = $this->load->view('client_account/view', array('profile'=>$profile, 'action'=>$action, 'success'=>$success), TRUE);
 			$console['footer_lt'] = null;
 			$console['footer_rt'] = null;
 			
@@ -73,7 +98,7 @@ class Client_account extends CI_Controller {
 			
 			$this->load->view('main',$data);
 			
-		} else show_error('Entity profile does not exist.');
+		} else show_error('Profile does not exist.');
 		
 	}
 	
@@ -98,24 +123,6 @@ class Client_account extends CI_Controller {
 		$data['content']['side'] = $this->load->view('_sidebar', null, true);
 		
 		$this->load->view('main',$data);
-	}
-	
-	function checkAddress ($zip) {
-		$this->load->library('ups');
-		
-		$address['addr1'] = $this->input->post('addr1');
-		$address['addr2'] = $this->input->post('addr2');
-		$address['city'] = $this->input->post('city');
-		$address['state'] = $this->input->post('state');
-		$address['zip5'] = substr($this->input->post('addr1'), 0, 5);
-		
-		$ups = $this->ups->validate_address($address);
-		var_dump($ups);
-		
-		$this->form_validation->set_message('checkAddress', 'This address is not valid.');
-		
-		if ($ups['quality'] == 1) return TRUE;
-		else return FALSE;
 	}
 	
 }

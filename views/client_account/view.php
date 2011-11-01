@@ -1,7 +1,17 @@
 <?php $this->load->helper('number'); ?>
 <div class="vcard">
 	<div class="mid body">
-		<h4 class="<?=($profile['isCompany'])?'fn org':'fn'?>"><?=$profile['name']?>'s Profile</h4>
+		<h4><?=$profile->name->full_posessive?> Profile</h4>
+		<span class="<?=($profile->is_company())?'fn org':'fn'?> hide"><?=$profile->name->full?></span>
+		<ul id="pf-summary">
+			<?php foreach ($profile->delegate->fetch_array() as $delegate) : ?>
+			<?php if (empty($delegate->job_title) !== true) : ?>
+			<li class="job"><?=$delegate->job_title?> at <?=profile_link($delegate->profile->pid)?></li>
+			<?php else: ?>
+			<li class="job">Account Manager for <?=profile_link($delegate->profile->pid)?></li>
+			<?php endif; ?>
+			<?php endforeach; ?>
+		</ul>
 	</div>
 	<form action="<?=current_url()?>" method="post" class="hide" id="addEmail">
 		<div class="mid body none">
@@ -11,8 +21,8 @@
 			<?php if ($action == 'add_email') echo validation_errors(); ?>
 			
 			<label for="email">New Email Address</label>
-			<input type="text" name="email" id="email"/>
-			<button action="submit">Add Email</button>
+			<input type="text" name="email" value="<?=set_value('email')?>" id="email"/>
+			<button action="submit" class="green">Save Email</button>
 		</div>
 	</form>
 	<form action="<?=current_url()?>" method="post" class="hide" id="addPhone">
@@ -23,11 +33,14 @@
 			<?php if ($action == 'add_phone') echo validation_errors(); ?>
 			
 			<label for="type">Phone Number Type</label>
-			<?=form_dropdown('type',$this->data->phone())?>
+			<?=form_dropdown('type',$this->data->type_tel(),set_value('type','VOICE'))?>
+
+			<label for="label">Label</label>
+			<input type="text" name="label" id="label" value="<?=set_value('label')?>"/>
 			
 			<label for="phone">New Phone Number</label>
-			<input type="text" name="phone" id="phone"/>
-			<button action="submit">Add Phone</button>
+			<input type="text" name="tel" id="phone" value="<?=set_value('tel')?>"/>
+			<button action="submit" class="green">Save Phone</button>
 		</div>
 	</form>
 	<form action="<?=current_url()?>" method="post" class="hide" id="addAddress">
@@ -38,43 +51,46 @@
 			<?php if ($action == 'add_address') echo validation_errors(); ?>
 			
 			<label for="type">Address Type</label>
-			<?=form_dropdown('type',$this->data->typeAddress)?>
+			<?=form_dropdown('type',$this->data->type_address(),set_value('type','POSTAL'))?>
 			
 			<label for="label">Label</label>
-			<input type="text" name="label" id="label"/>
+			<input type="text" name="label" id="label" value="<?=set_value('label')?>"/>
 			
-			<label for="addr1">Street Address</label>
-			<input type="text" name="addr1" id="addr1"/><br/>
-			<input type="text" name="addr2" id="addr2"/>
+			<label for="street1">Street Address</label>
+			<input type="text" name="street1" id="street1" value="<?=set_value('street1')?>"/><br/>
+			<input type="text" name="street2" id="street2" value="<?=set_value('street2')?>"/>
 			
 			<label for="city">City</label>
-			<input type="text" name="city" id="city"/>
+			<input type="text" name="city" id="city" value="<?=set_value('city')?>"/>
 			
+			<label for="country">Country</label>
+			<?=form_dropdown('country',$this->data->countries(),set_value('country','US'))?>
+
 			<label for="state">State</label>
-			<?=form_dropdown('state',$this->data->states,'CA')?>
+			<?=form_dropdown('state',$this->data->states(),set_value('state','CA'))?>
 			
-			<label for="zip">Zip Code</label>
-			<input type="text" name="zip" id="zip"/>
-			
-			<button action="submit">Add Address</button>
+			<label for="zip">Postal Code</label>
+			<input type="text" name="zip" id="zip" value="<?=set_value('zip')?>"/>
+
+			<button action="submit" class="green">Save Address</button>
 		</div>
 	</form>
 	<div class="mid body">
 		<div id="pf-address">
 			<h4>Address</h4>
 			<ul>
-				<?php if (isset($profile['address'])) foreach($profile['address'] as $address) : ?>
+				<?php foreach($profile->address->fetch_array() as $address) : ?>
 					<li class="adr">
-						<span class="type"><?php if ($address['label'] != null) { echo $address['label']; } elseif ($address['type'] == 'm') { echo 'Mailing'; } elseif ($address['type'] == 'o') { echo 'Office'; } elseif ($address['type'] == 'b') { echo 'Billing'; } elseif ($address['type'] == 'h') { echo 'Home'; } ?></span>
+						<span class="type"><?=$address->type?></span>
 						<address>
 							<span class="street-address">
-							<?=preg_replace('/\s/','&nbsp;',$address['addr1']); if ($address['addr2'] == null) { ?><br/><?php } ?> 
+							<?=preg_replace('/\s/','&nbsp;',$address->street1); if ($address->street2 == null) { ?><br/><?php } ?> 
 							</span>
 							<span class="extended-address">
-								<?=preg_replace('/\s/','&nbsp;',$address['addr2']); if ($address['addr2'] != null) { ?><br/><?php } ?>
+								<?=preg_replace('/\s/','&nbsp;',$address->street2); if ($address->street2 != null) { ?><br/><?php } ?>
 							</span>
-							<span class="locality"><?=$address['city'] ?></span>, <span class="region"><?=$address['state'] ?></span>
-							<span class="postal-code"><?=$address['zip5']; if ($address['zip4'] != null) { ?>-<?=$address['zip4']; } ?></span>
+							<span class="locality"><?=$address->city ?></span>, <span class="region"><?=$address->state ?></span>
+							<span class="postal-code"><?=$address->zip?></span>
 						</address>
 					</li>
 				<?php endforeach; ?>
@@ -84,8 +100,8 @@
 		<div id="pf-email">
 			<h4>Email Address</h4>
 			<ul>
-				<?php if (isset($profile['email'])) foreach($profile['email'] as $email) : ?>
-					<li><?php echo $email['email']; ?></li>
+				<?php foreach($profile->email->fetch_array() as $email) : ?>
+					<li><?=$email?></li>
 				<?php endforeach; ?>
 			</ul>
 			<a href="#" class="button" id="btnAddEmail">Add Email</a>
@@ -93,11 +109,11 @@
 		<div id="pf-phone">
 			<h4>Phone Number</h4>
 			<ul>
-				<?php if (isset($profile['phone'])) foreach($profile['phone'] as $phone) : ?>
-					<li class="icn phone <?=$this->data->phone($phone['type'],TRUE)?>" title="<?=$this->data->phone($phone['type'])?>">
+				<?php foreach($profile->tel->fetch_array() as $tel) : ?>
+					<li class="icn phone <?=$tel->type?>" title="<?=$tel->type?>">
 						<span class="tel">
-							<span class="type hide"><?=$this->data->phone($phone['type'],TRUE)?></span>
-							<span class="value"><?=phone_format($phone['num']) ?></span>
+							<span class="type hide"><?=$tel->type?></span>
+							<span class="value"><?=tel_format($tel) ?></span>
 						</span>
 					</li>
 				<?php endforeach; ?>
@@ -107,38 +123,30 @@
 		<div class="clear"></div>
 	</div>
 	<div class="mid body">
-		<?php if ($profile['isCompany'] == TRUE) : ?>
-			<a href="#" class="button floatr in_development" id="btnGrantPerms">Grant Access to <?=$profile['name']?></a>
-			
-			<h4>Authorized Users</h4>
-		
-			<?php if (count($accounts) == 1) : ?>
-			<div class="msg warning">
-				WARNING: There is no person with access to this account.  
-				Web-based user account management is not possible.
-			</div>
-			<?php endif; ?>
-		
-		<?php elseif ($profile['isCompany'] == FALSE) : ?>
-		<h4>Authorized Account Access</h4>
+		<a href="#" class="button floatr in_development">Add Manager</a>
+		<h4>Account Managers</h4>
+		<?php if ($profile->is_company() && count($profile->manager->fetch_array()) === 0) : ?>
+		<div class="msg warning">
+			WARNING: There is no person with access to this account.  
+			Web-based user account management is not possible.
+		</div>
 		<?php endif; ?>
-	
 		<table id="pf-accounts">
 			<thead>
 				<tr>
+					<td>Manager's Name</td>
 					<td>Account Number</td>
-					<td>Account Holder</td>
 					<td>Job Title</td>
 					<td>Actions</td>
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach($accounts as $account) : ?>
+				<?php foreach($profile->manager->fetch_array() as $manager) : ?>
 				<tr>
-					<td><?=acctnum_format($account['acctnum']) ?></td>
-					<td><a href="#" onclick="updateHUD(<?=$account['eid'] ?>);"><?=$account['name'] ?></a></td>
-					<td><?php if (isset($account['jobTitle'])) echo $account['jobTitle']; ?></td>
-					<td><?php if($account['eid'] != $profile['eid']):?><a href="#" class="button red in_development">Drop Permissions</a><?php endif;?></td>
+					<td><?=profile_link($manager->profile->pid)?></td>
+					<td><?=acctnum_format($manager->profile->pid)?></td>
+					<td><?=$manager->job_title?></td>
+					<td><a href="#" class="button red in_development">Drop Permissions</a></td>
 				</tr>
 				<?php endforeach; ?>
 			</tbody>
