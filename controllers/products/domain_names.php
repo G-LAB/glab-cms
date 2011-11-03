@@ -26,9 +26,6 @@ class Domain_names extends CI_Controller {
 		
 		$data = $this->domain->accounts(false,$offset);
 		
-		$pagination['page_query_string'] = TRUE;
-		$pagination['query_string_segment'] = 'offset';
-		$pagination['base_url'] = site_url('products/domain_names/accounts?eid=false');
 		$pagination['total_rows'] = $this->db->count_all('domains');
 		$pagination['per_page'] = 10;
 		
