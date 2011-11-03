@@ -16,17 +16,18 @@ class Documents extends CI_Controller {
 
 	function browser () {
 		
-		$offset = $this->input->get('per_page');
+		$offset = $this->input->get('offset');
+		$limit = 5;
 		
-		$docs = $this->document->get($offset,5);
+		$docs = $this->document->fetch_array($offset,$limit);
 		
 		$count_this  = count($docs);
 		$count_total = $this->db->count_all_results('documents');
 		
 		$this->load->library('pagination');
-		$config['base_url'] = current_url().'?c=documents&m=browser';
+
 		$config['total_rows'] = $count_total;
-		$config['per_page'] = '10';
+		$config['per_page'] = $limit;
 		$this->pagination->initialize($config); 
 		
 		$console['header'] = 'Showing '.($offset + 1).' - '.($offset + $count_this).' of '.$count_total;
@@ -114,39 +115,66 @@ class Documents extends CI_Controller {
 	
 	function fax ($dcid=false) {
 		
-		if (!$dcid) redirect('documents');
-		
-		$this->load->library('form_validation');
-		$this->load->model('dm');
-		
-		$this->form_validation->set_rules('num', 'Phone Number', 'required|phone_strip');
-		
-		if ($this->form_validation->run()) {
-			
-			$this->load->library('fax');
-			
-			set_time_limit(30);
+		if ($dcid === false) redirect('documents');
 
-			$path = $this->dm->getPath($dcid);
+		$document = $this->document->get($dcid);
+		
+		if (empty($document) !== true)
+		{
+			$this->load->library('form_validation');
 			
-			if (!$path)  show_error('Could not find path to document or invalid signature.');
+			$this->form_validation->set_rules('tel', 'Phone Number', 'required|is_tel|tel_dialstring|callback_us10digit');
 			
-			$fax = $this->fax->send($this->input->post('num'),$path);
+			if ($this->form_validation->run() == true) {
+				
+				$this->load->library('fax');
+				
+				set_time_limit(30);
+
+				$path = $this->document->get_tmp_path($file_id);
+				
+				if (empty($path) === true) show_error('Could not load the requested file from document server.');
+				
+				if ($this->fax->send($this->input->post('tel'),$path) === true) 
+				{
+					$data['pageTitle'] = 'Sent';
+					$console['body'] = $this->load->view('documents/fax_confirm', array('tel'=>$this->input->post('tel')), TRUE);
+				}
+				else 
+				{
+					show_error('Error sending fax.');
+				}
+			} 
+			else 
+			{
+				$console['body'] = $this->load->view('documents/fax', array('document'=>$document), TRUE);
+			}
 			
-			$data['pageTitle'] = 'Sent';
+			$data['content']['body'] = $this->load->view('console', $console, true);
+			$data['content']['side'] = $this->load->view('_sidebar', null, true);
 			
-			if ($fax) $console['body'] = $this->load->view('documents/fax_confirm', array('num'=>$this->input->post('num')), TRUE);
-			else show_error('Error sending fax.');
-			
-		} else {
-			$console['body'] = $this->load->view('documents/fax', array('dcid'=>$dcid), TRUE);
+			$this->load->view('main',$data);
 		}
-		
-		$data['content']['body'] = $this->load->view('console', $console, true);
-		$data['content']['side'] = $this->load->view('_sidebar', null, true);
-		
-		$this->load->view('main',$data);
-		
+		else
+		{
+			show_error('Document not found.');
+		}
+	}
+
+	function us10digit ($str)
+	{
+		$str = tel_convert_vanity($str);
+		$str = preg_replace('/[^\d]/','', $str);
+
+		if (is_tel(substr($str,-10)))
+		{
+			return substr($str,-10);
+		}
+		else
+		{
+			$this->form_validation->set_message('us10digit', 'The %s field must contain a 10-digit US fax number.');
+			return false;
+		}
 	}
 
 }

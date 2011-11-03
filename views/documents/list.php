@@ -14,7 +14,7 @@
 		<span class="docButtons buttonBar"> 
 			<!--<a href="#" class="button">Open in Viewer</a> -->
 			<a href="<?=site_url('documents/download/'.$doc->file_id)?>" class="button">Download (<?=format_filesize($doc->file_info->size)?>)</a>
-			<a href="<?=site_url('documents/download/'.$doc->dcid)?>" class="button">Send as Fax</a>
+			<a href="<?=site_url('documents/fax/'.dechex($doc->dcid))?>" class="button">Send as Fax</a>
 			<!--<a href="#" class="button">Send as Email</a>-->
 			<?php if ($doc->is_new) : ?>
 			<a href="<?=site_url('documents/mark_read/'.$doc->dcid)?>" class="button red">Mark as Read</a>
