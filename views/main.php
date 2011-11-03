@@ -195,6 +195,11 @@
 			<a href="<?php if (isset($content['nav']['uri'])) echo site_url($content['nav']['uri']); else echo current_url()?>"><?=$content['nav']['title']?></a>
 			<?php endif ?>
 		</div>
+		<?php foreach (User_Notice::fetch_array() as $notice) : ?>
+		<div class="msg <?=$notice->type?>">
+			<?=$notice?>
+		</div>
+		<?php endforeach; ?>
 		<div id="target"><?=$content['body'] ?></div>
 	</div>
 	<div id="bd-side">
