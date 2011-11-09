@@ -5,12 +5,6 @@ class Phone extends CI_Controller {
 	private $parent;
 	private $child;
 	
-	function __construct () {
-		parent::__construct();
-		
-		// Construct
-	}
-	
 	function index () {
 		// Redirect to default method
 		redirect('phone/calls');
@@ -18,37 +12,15 @@ class Phone extends CI_Controller {
 	
 	function calls() {
 		$this->load->library('Asterisk');
-		
-		$data = $this->asterisk->getChannels();
+
+		$channels = $this->asterisk->get_channels();
 		
 		$calls = array();
-		foreach ($data as $channel) {
-			$thisCall = $this->asterisk->getChannelStatus($channel['Channel']);
-			
-			$contexts[] = 'ext-queues';
-			$contexts[] = 'from-did-direct';
-			$contexts[] = 'from-internal-xfer';
-			$contexts[] = 'directory';
-			
-			if ($thisCall && in_array($thisCall['Context'], $contexts)) $calls[] = $thisCall;
-			
-		}
-		
-		//$calls[] = array('CallerIDNum'=>'3109560495','Seconds'=>'100','Uniqueid'=>time());
-			
-		foreach ($calls as $key=>$call) {
-			
-			$eid = $this->entity->getEidByPhone($call['CallerIDNum']);
-			
-			$calls[$key] = $call;
-			
-			if ($eid) {
-				$calls[$key]['entity'] = $this->entity->get($eid);
-				$calls[$key]['entity']['formvalue'] = $this->_formValue($call,$eid);
-				
-				$calls[$key]['subentities'] = $this->entity->getSubentities($eid);
-				if (is_array($calls[$key]['subentities'])) 
-					foreach ($calls[$key]['subentities'] as $skey=>$se) $calls[$key]['subentities'][$skey]['formvalue'] = $this->_formValue($call,$eid,$se['eid']);
+		if (empty($channels) !== true) foreach ($channels as &$channel) 
+		{
+			if (is_tel(element('CallerIDnum',$channel)) === true) 
+			{
+				$calls[] = $channel;
 			}
 		}
 	
@@ -63,22 +35,21 @@ class Phone extends CI_Controller {
 		$this->load->view('main',$data);
 	}
 	
-	function authenticate() {
+	function authenticate() 
+	{
 		
 		$this->load->library('session');
 		$this->load->library('form_validation');
-		$this->form_validation->set_error_delimiters('<div class="msg error">', '</div>');
+		$this->load->model('ticket');
 		
 		// Redirect to Home if Info Not Passed
-		if ( !$this->input->post('caller') ) redirect('phone');
-		
-		$caller = unserialize($this->input->post('caller'));
-		
-		// Set Class Properties for Use in Validation
-		if ($this->input->post('action')) {
-			$this->parent = $caller['parent'];
-			$this->child = $caller['child'];
+		if ($this->input->post('call') === false) 
+		{
+			redirect('phone');
 		}
+
+		$call = unserialize($this->input->post('call'));
+		$queues = array_flatten($this->ticket->get_queues(),'qid','name');
 		
 		// Validation Rules
 		if ($this->input->post('action') == 'ccard') 
@@ -89,12 +60,16 @@ class Phone extends CI_Controller {
 			$this->form_validation->set_rules('action', 'Personal Identification', 'required');
 		
 		// Validate
-		if ($this->form_validation->run() && $this->input->post('action') != 'none') {
-			$this->session->set_flashdata('caller', unserialize($this->input->post('caller')) );
-			redirect('phone/update');
-		} else {
+		if ($this->form_validation->run() && $this->input->post('action') != 'none') 
+		{
+			$ticket = $this->ticket->add_ticket('phone', $this->input->post('qid'), tel_dialstring(element('CallerIDnum',$call)), element('UniqueID',$call), null, null, null, 'new', false);
+			
+			redirect('communication');
+		} 
+		else 
+		{
 			$console['body'] = $this->load->view('phone/wizard', null, TRUE);
-			$console['body'].= $this->load->view('phone/2_auth', array('formvalue'=>$this->input->post('caller'),'caller'=>unserialize($this->input->post('caller'))), TRUE);
+			$console['body'].= $this->load->view('phone/2_auth', array('queues'=>$queues), TRUE);
 			
 			$data['content']['body'] = $this->load->view('console', $console, true);
 			$data['content']['side'] = $this->load->view('_sidebar', null, true);
@@ -103,95 +78,11 @@ class Phone extends CI_Controller {
 		}
 	}
 	
-	function update () {
-		
-		$this->load->library('session');
-		
-		// Redirect to Home if Info Not Passed
-		if ( !$this->session->flashdata('caller') ) redirect('phone');
-		
-		$caller = $this->session->flashdata('caller');
-		$this->users->updateHistory($caller['parent']);
-		
-		$console['body'] = $this->load->view('phone/wizard', null, TRUE);
-		$console['body'].= $this->load->view('phone/3_update', array('caller'=>$caller), TRUE);
-		
-		$data['content']['body'] = $this->load->view('console', $console, true);
-		$data['content']['side'] = $this->load->view('_sidebar', null, true);
-		
-		$this->load->view('main',$data);
-		
-	}
-	
-	function ticket ($tiknum=FALSE) {
-		
-		$this->load->helper('form');
-		$this->load->model('ticketman');
-		$this->load->library('session');
-		$this->load->library('form_validation');
-		$this->form_validation->set_error_delimiters('<div class="msg error">', '</div>');
-		
-		// Redirect to Home if Info Not Passed
-		if ( !$this->input->post('caller') && !$tiknum ) redirect('phone');
-		
-		$caller = unserialize($this->input->post('caller'));
-		
-		// Get Queue List
-		$queueData = $this->ticketman->getQueues();
-		foreach ($queueData as $qid=>$queue) {
-			$queues[$qid] = $queue['name'];
-		}
-		
-		// Set Validation Rules
-		$this->form_validation->set_rules('notes', 'Notes', 'required|min_length[100]');
-		
-		// Result: Success
-		if ( $this->input->post('action') && $this->form_validation->run() ) {
-			echo 'Ticket Result';
-		
-		// Result: No Action Show Ticket Form
-		} elseif ( $tiknum ) {
-			$console['body'] = $this->load->view('phone/wizard', null, TRUE);
-			$console['body'].= $this->load->view('phone/4_ticket_update', array('caller'=>$caller,'queues'=>$queues), TRUE);
-		// Result: Show Open Ticket Screen
-		} else {
-			
-			if ($this->input->post('queue')) {
-				$ticket['eid'] = $caller['parent'];
-				$ticket['qid'] = $this->input->post('queue');
-				$ticket['status'] = 1;
-				$tiknum = $this->ticketman->addTicket($ticket);
-				
-				$entry['tiknum'] = $tiknum;
-				$entry['type'] = 'p';
-				$entry['source'] = $caller['num'];
-				$entry['fingerprint'] = $caller['uniqueid'];
-				$entry['action'] = 1;
-				$entry['action_eid'] = $caller['child'];
-				$enid = $this->ticketman->addEntry($entry);
-				
-				$this->load->library('Asterisk');
-				$this->asterisk->setUserfield($caller['channel'],$enid);
-				
-				redirect('phone/ticket/'.$tiknum);
-			}
-			
-			$console['body'] = $this->load->view('phone/wizard', null, TRUE);
-			$console['body'].= $this->load->view('phone/4_ticket_open', array('caller'=>$caller,'queues'=>$queues), TRUE);
-		}
-		
-		$data['content']['body'] = $this->load->view('console', $console, true);
-		$data['content']['side'] = $this->load->view('_sidebar', null, true);
-		
-		$this->load->view('main',$data);
-		
-	}
-	
 	private function _formValue($call,$p_eid,$c_eid=null) {
 		
 		$this->load->helper('number');
 		
-		$data['num'] = phone_strip($call['CallerIDNum']);
+		$data['num'] = tel_dialstring($call['CallerIDNum']);
 		$data['channel'] = $call['Channel'];
 		$data['uniqueid'] = $call['Uniqueid'];
 		$data['parent'] = $p_eid;

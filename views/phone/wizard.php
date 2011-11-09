@@ -7,12 +7,8 @@
 		<span>Step Two</span>
 		<span>Authenticate</span>
 	</li>
-	<li class="<?=($this->router->fetch_method()=='update') ? 'selected':''?>">
-		<span>Step Three</span>
-		<span>Update Records</span>
-	</li>
 	<li class="<?=($this->router->fetch_method()=='ticket') ? 'selected':''?>">
-		<span>Step Four</span>
+		<span>Step Three</span>
 		<span>Record Notes</span>
 	</li>
 </ul>
