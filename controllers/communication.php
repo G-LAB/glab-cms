@@ -1,11 +1,13 @@
 <?php
 
-class Communication extends CI_Controller {
+class Communication extends CI_Controller 
+{
 	
 	public static $menu;
 	public static $cmenu;
 	
-	function __construct() {
+	function __construct() 
+	{
         parent::__construct();
         $this->load->model('document');
         $this->load->model('ticket');
@@ -13,23 +15,14 @@ class Communication extends CI_Controller {
         $this->load->helper('text');
         
         $this->cmenu[] = array('url'=>'communication/tickets', 'text'=>'Support Tickets', 'attr'=>'class="ticket"', 'count'=>$this->ticket->get_count());
-        //$this->cmenu[] = array('url'=>'communication/knowledge_base', 'text'=>'Knowledge Base', 'attr'=>'class="kb"');
+        //$this->cmenu[] = array('url'=>'knowledge_base', 'text'=>'Knowledge Base', 'attr'=>'class="kb"');
         $this->db->where('is_new',TRUE);
         $this->cmenu[] = array('url'=>'communication/fax_messages', 'text'=>'Fax Messages', 'attr'=>'class="fax"', 'count'=>$this->document->get_count_new());
         //$this->cmenu[] = array('url'=>'communication/announcements', 'text'=>'Announcements', 'attr'=>'class="annc"');
-
-		$this->menu[] = array('url'=>'communication/tickets', 'name'=>'Show All');
-		foreach ($this->ticket->queues as $queue) {
-			$menuItem['url'] = 'communication/tickets/'.$queue['qid'];
-			$menuItem['name'] = $queue['name'];
-			$menuItem['count'] = $this->ticket->get_count($queue['qid']);
-			
-			$this->menu['menuTitle'] = 'Filter By Queue';
-			$this->menu[] = $menuItem;
-		}
 	}
 	
-	function index () {
+	function index () 
+	{
 		redirect('communication/tickets');
 	}
 	
@@ -38,7 +31,8 @@ class Communication extends CI_Controller {
 		redirect($this->ticket->get_attachment_url($fingerprint.'/'.$file_name));
 	}
 	
-	function fax_messages () {
+	function fax_messages () 
+	{
 		
 		$this->load->helper('url');
 		$this->load->helper('file');
@@ -72,7 +66,8 @@ class Communication extends CI_Controller {
 		
 	}
 	
-	function tickets ($qid=null) {
+	function tickets ($qid=null) 
+	{
 	
 		$this->load->helper('number');
 		$this->load->helper('date');
@@ -111,7 +106,8 @@ class Communication extends CI_Controller {
 	
 	}
 
-	function ticket_view ($tikid=null) {
+	function ticket_view ($tikid=null) 
+	{
 		if ($tikid == null) redirect('communication/tickets');
 		$tiknum = $this->ticket->fetch_id(preg_replace("/[^0-9A-Za-z]/", '', $tikid));
 		
@@ -144,7 +140,8 @@ class Communication extends CI_Controller {
 	
 	}
 	
-	function ticket_reply () {
+	function ticket_reply () 
+	{
 		$agent = $this->profile->current();
 		$this->ticket->add_entry(	$this->input->post('tiknum'),
 									'email',
@@ -156,7 +153,8 @@ class Communication extends CI_Controller {
 		redirect('communication');
 	}
 
-	function ticket_close ($tiknum) {
+	function ticket_close ($tiknum) 
+	{
 		$agent = $this->profile->current();
 		if ($this->ticket->add_entry($tiknum, 'email', $agent->pid, uniqid(), null, null, null, 'closed', false)) redirect('communication/tickets');
 		else echo 'Error changing ticket status.';

@@ -2,19 +2,10 @@
 
 class Finance extends CI_Controller {
 	
-	var $menu;
-	
-	function Finance () {
+	function __construct () {
 		parent::__construct();
 		
-		$this->load->model('accounting');
-		
-		$this->menu[] = array('name'=>'Chart of Accounts', 'url'=>'finance/chart_accounts');
-		$this->menu[] = array('name'=>'General Journal', 'url'=>'finance/journal');
-		$this->menu[] = array('name'=>'Check Register', 'url'=>'finance/check_register');
-		$this->menu[] = array('name'=>'Make a Bank Transfer', 'url'=>'finance/journal');
-		$this->menu[] = array('name'=>'Write a Check', 'url'=>'finance/check/write');
-	
+		$this->load->model('accounting');	
 	}
 	 
 	function index() {

@@ -1,12 +1,3 @@
-<?php if (isset($this->menu) && is_array($this->menu)) : ?>
-<ul id="LocalMenu">
-	<li><?php if (isset($this->menu['menuTitle'])) echo $this->menu['menuTitle']; else echo "Section Menu"; ?></li>
-<?php foreach ($this->menu as $nid=>$nav) if (is_numeric($nid)) { ?>
-	<li><a href="<?php echo site_url($nav['url']); ?>"<?php if (isset($nav['events'])) foreach ($nav['events'] as $eventType => $eventAction) echo ' '.$eventType.'="'.$eventAction.'"'; ?>><?php echo $nav['name']; if (isset($nav['count']) && $nav['count'] != 0) echo '<span class="count">'.number_format($nav['count']).'</span>'; ?></a></li>
-<?php } ?>
-</ul>
-<?php endif; ?>
-
 <?php if (isset($subMenu)) : ?>
 	<?php echo $subMenu ?>
 <?php endif; ?>
