@@ -122,10 +122,25 @@ class Login extends CI_Controller {
 				$response = $yubico->verify($otp);
 				if ($response === true) 
 				{	
-					$pid = $data->row()->owner;
-					$this->acl->create_session($pid);
-					$this->event->log('auth_success',$pid);
-					return true;
+					$pid = $data->row()->pid;
+					$profile = $this->profile->get($pid);
+
+					if ($profile->exists() === true AND $profile->is_employee())
+					{
+						$this->acl->create_session($pid);
+						$this->event->log('auth_success',$pid);
+						return true;
+					}
+					elseif ($profile->exists() === true)
+					{
+						$this->form_validation->set_message('validateYubikey', $profile->name->full.' is not an employee.');
+						return false;
+					}
+					else
+					{
+						$this->form_validation->set_message('validateYubikey', 'Could not find profile. ('.$pid.')');
+						return false;
+					}
 				} 
 				else 
 				{
