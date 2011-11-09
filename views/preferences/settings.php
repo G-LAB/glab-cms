@@ -24,7 +24,7 @@
 
 		<label>
 			Time Format<br/>
-			<?=form_dropdown('time_format',array('12-Hour Time ('.date('g:i A').')','24-Hour Time ('.date('H:i').')'),set_value('time_format',$profile->meta->time_format))?>
+			<?=form_dropdown('time_format',array('12'=>'12-Hour Time ('.date('g:i A').')','24'=>'24-Hour Time ('.date('H:i').')'),set_value('time_format',$profile->meta->time_format))?>
 		</label>
 		
 		<button type="submit">Save Preferences</button>
