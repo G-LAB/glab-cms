@@ -58,26 +58,26 @@
 	<table>
 		<tr>
 			<td>Jeremy Aluma</td>
-			<td class="justr"><a href="#" class="phoneNumber">102</a></td>
+			<td class="justr"><a href="#" class="click2call">102</a></td>
 		</tr>
 		<tr>
 			<td>Ryan Brodkin</td>
-			<td class="justr"><a href="#" class="phoneNumber">101</a></td>
+			<td class="justr"><a href="#" class="click2call">101</a></td>
 		</tr>
 		<tr>
 			<td>Jonathan Lewis</td>
-			<td class="justr"><a href="#" class="phoneNumber">103</a></td>
+			<td class="justr"><a href="#" class="click2call">103</a></td>
 		</tr>
 	</table>
 	<h3>Feature Codes</h3>
 	<table>
 		<tr>
 			<td>Check Voicemail</td>
-			<td class="justr"><a href="#" class="phoneNumber">*97</a></td>
+			<td class="justr"><a href="#" class="click2call">*97</a></td>
 		</tr>
 		<tr>
 			<td>Conference Call</td>
-			<td class="justr"><a href="#" class="phoneNumber">200</a></td>
+			<td class="justr"><a href="#" class="click2call">200</a></td>
 		</tr>
 	</table>
 </div>

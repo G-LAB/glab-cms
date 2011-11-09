@@ -1,24 +1,34 @@
 <?php
 
-class Pbx extends CI_Controller {
-	
-	function __construct() {
-		parent::__construct();
-	}
-	
-	function call ($phone) {
-		
+class Pbx extends CI_Controller 
+{	
+	function call () 
+	{
 		$this->load->library('Asterisk');
+
+		$tel = $this->input->get_post('tel');
 		
-		$num = phone_strip($phone);
-		if (strlen($phone) > 4) $num = '91'.$num;
+		if (strlen($tel) > 3) $tel = tel_dialstring($tel);
+
+		if ($this->input->get_post('ext') !== false)
+		{
+			$ext = $this->input->get_post('ext');
+		}
+		elseif (isset($this->profile->current()->meta->pbx_callback) === true)
+		{
+			$ext = $this->profile->current()->meta->pbx_callback;
+		}
+		elseif (isset($this->profile->current()->meta->pbx_ext) === true)
+		{
+			$ext = $this->profile->current()->meta->pbx_ext;
+		}
+		else
+		{
+			show_error('No callback number or extension set in preferences.');
+		}
 		
-		$ext = $this->entity->getValue('extensionCallback',FALSE,'admin');
-		
-		if (!empty($phone) && !empty($ext)) $this->asterisk->call($num,$ext);
-		else show_error('Phone number invalid or extension missing.');
-	}
-	
+		$this->asterisk->call($tel,$ext);
+	}	
 }
 
 ?>
