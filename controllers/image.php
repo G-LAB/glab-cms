@@ -1,22 +1,6 @@
 <?php
 
 class Image extends CI_Controller {
-
-	function view($size, $file) {
-		
-		$config['image_library'] = 'GD';
-		$config['source_image']	= '/home/91576/domains/glabstudios.com/html/images/backend/icons/'.$file;
-		$config['create_thumb'] = TRUE;
-		$config['maintain_ratio'] = TRUE;
-		$config['width']	 = $size;
-		$config['height']	= $size;
-		$config['dynamic_output'] = TRUE;
-		
-		$this->load->library('image_lib', $config); 
-		
-		$this->image_lib->resize();
-		
-	}
 	
 	function barcode () {
 	
