@@ -17,7 +17,7 @@
 				<span id="vmCount" class="count">Loading...</span>
 			</a>
 		</li>
-		<li class="settings"><a href="<?php echo site_url('admin/settings') ?>">My Settings</a></li>
+		<li class="settings"><a href="<?php echo site_url('preferences') ?>">My Preferences</a></li>
 	</ul>
 	<div class="clearfix">&nbsp;</div>
 	
