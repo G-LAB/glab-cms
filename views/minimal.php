@@ -31,6 +31,11 @@
 </div>
 <div id="bd">
 	<h2><?php echo $pageTitle ?></h2>
+	<?php foreach (User_Notice::fetch_array() as $notice) : ?>
+		<div class="notice <?=$notice->type?>">
+			<?=$notice?>
+		</div>
+	<?php endforeach; ?>
 	<?php echo $content['body'] ?>
 </div>
 <div id="ft">

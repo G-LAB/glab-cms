@@ -196,7 +196,7 @@
 			<?php endif ?>
 		</div>
 		<?php foreach (User_Notice::fetch_array() as $notice) : ?>
-		<div class="msg <?=$notice->type?>">
+		<div class="notice <?=$notice->type?>">
 			<?=$notice?>
 		</div>
 		<?php endforeach; ?>
