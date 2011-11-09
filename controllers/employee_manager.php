@@ -7,10 +7,6 @@ class Employee_manager extends CI_Controller {
 		parent::__construct();
 
 		$this->load->library('form_validation');
-		
-		$this->menu[] = array('name'=>'Admin Accounts', 'url'=>'employee_manager/users');
-		$this->menu[] = array('name'=>'My Settings', 'url'=>'employee_manager/settings');
-		$this->menu[] = array('name'=>'My Profile', 'url'=>'profile/view/'.$this->session->userdata('eid'));
 	}
 	
 	function index () 
