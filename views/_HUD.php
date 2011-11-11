@@ -59,7 +59,7 @@ if (isset($eid) == true && $eid != null) $HUD = $this->users->getData($eid);
 					<li class="icn phone <?=$this->data->phone($phone['type'],TRUE)?>" title="<?=$this->data->phone($phone['type'])?>">
 						<span class="tel">
 							<span class="type hide"><?=$this->data->phone($phone['type'],TRUE)?></span>
-							<span class="value"><?=phone_format($phone['num']) ?></span>
+							<span class="value"><?=tel_format($phone['num']) ?></span>
 						</span>
 					</li>
 					<?php endforeach ?>
@@ -114,7 +114,7 @@ if (isset($eid) == true && $eid != null) $HUD = $this->users->getData($eid);
 						</ul>
 						<ul class="phones">
 							<?php foreach ($person['phone'] as $phone) : ?>
-							<li class="icn phone"><?=phone_format($phone['num']) ?></li>
+							<li class="icn phone"><?=tel_format($phone['num']) ?></li>
 							<?php endforeach ?>
 						</ul>
 					</div>
@@ -138,7 +138,7 @@ if (isset($eid) == true && $eid != null) $HUD = $this->users->getData($eid);
 						</ul>
 						<ul class="phones">
 							<?php foreach ($account['phone'] as $phone) : ?>
-							<li class="mobile"><?=phone_format($phone['num']) ?></li>
+							<li class="mobile"><?=tel_format($phone['num']) ?></li>
 							<?php endforeach ?>
 						</ul>
 					</div>
