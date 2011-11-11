@@ -30,7 +30,7 @@ class Projects extends CI_Controller {
 		$data = $this->input->xss_clean($_POST);
 		
 		if ($mode == 'newTask') $success = $this->projman->addTask($data['pjid'], $data['ptskid'], $data['name'], $data['description'], $data['dateStart'], $data['dateDue']);
-		elseif ($mode == 'newProject') $success = $this->projman->addProject($data['eid'], $data['name'], $data['description'], $data['status'], $data['hideDetails']);
+		elseif ($mode == 'newProject') $success = $this->projman->addProject($data['pid'], $data['name'], $data['description'], $data['status'], $data['hideDetails']);
 		elseif ($mode == 'updateProject') $success = $this->projman->updateProject($data['pjid'], $data);
 		
 		if ($success) echo '1';

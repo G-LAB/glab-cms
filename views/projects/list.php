@@ -167,7 +167,7 @@
 			<div>
 				<div class="pbar onSchedule<?=$project['onSchedule']?>"></div>
 				<span class="label">Account: </span>
-							<?=profile_link($project['eid'])?> 
+							<?=profile_link($project['pid'])?> 
 				<span class="label">Schedule: </span>	
 							<?php
 								if (isset($project['tsDue'])) {
@@ -203,7 +203,7 @@
 
 				<label>Client</label>
 				<input id="entitySearch"/>
-				<input type="hidden" name="eid" />
+				<input type="hidden" name="pid" />
 				<span id="entityAccount"></span>
 				
 				<label>Project Status</label>
