@@ -3,8 +3,6 @@
 
 		<h4>Add New Sales Lead</h4>
 		
-		<?php echo validation_errors(); ?>
-		
 		<div class="floatr">
 			<label for="notes">Notes</label>
 			<textarea name="notes" cols="42" rows="29" id="notes"><?=set_value('notes')?></textarea>
@@ -36,17 +34,15 @@
 		<input type="text" name="city" value="<?=set_value('city')?>" id="city"/>
 		
 		<label for="state">State</label>
-		<?=form_dropdown('state',$this->data->states,'CA')?>
+		<?=form_dropdown('state',$this->data->states(),set_value('state','CA'))?>
 		
 		<label for="zip5">Zip Code</label>
 		<input type="text" name="zip5" value="<?=set_value('zip5')?>" id="zip5"/>
 		
-		<div class="justr clear">
-			<button action="submit">Save Sales Lead</button>
-		</div>
+		<button action="submit" class="green">Save Sales Lead</button>
 	</div>
 </form>
-<div class="mid body" id="buttonBar">
+<div class="mid header" id="buttonBar">
 	<a href="#" class="button" id="btn_addLead">Add Sales Lead</a>
 </div>
 <?php foreach ($leads as $lead) : ?>
@@ -59,7 +55,14 @@
 		</div>
 	</form>
 
-	<h4><?php if ($lead['firstName'] != null || $lead['lastName'] != null) echo $lead['firstName'].' '.$lead['lastName'].' at '; echo $lead['companyName']; ?></h4>
+	<?php 
+		$name =null; 
+		if ($lead['firstName'] != null || $lead['lastName'] != null) $name.= $lead['firstName'].' '.$lead['lastName'].' at '; 
+		$name.= $lead['companyName']; 
+	?>
+	<h4 title="<?=htmlspecialchars($name)?>">
+		<?=character_limiter($name,30)?>
+	</h4>
 	<h5>Contact Information</h5>
 	<p>
 		<?php if($lead['phone'] != null): ?>
@@ -83,7 +86,7 @@
 	<?php if ($lead['yelp']) : ?>
 	<div class="yelp_bar">
 		<img src="http://media3.ct.yelpcdn.com/static/201012162846157596/i/developers/yelp_logo_50x25.png" width="50" height="25" class="logo"/>
-		<p class="name"><a href="<?=$lead['yelp']->url?>"><?=$lead['yelp']->name?></a></p>
+		<p class="name"><a href="<?=$lead['yelp']->url?>"><?=character_limiter($lead['yelp']->name,12)?></a></p>
 		<img src="<?=$lead['yelp']->rating_img_url?>" class="rating" />
 		<p class="review_count"><?=$lead['yelp']->review_count?> Reviews</p>
 		<p class="read_more"><a href="<?=$lead['yelp']->url?>">Read More</a></p>
@@ -99,9 +102,9 @@
 		<?=auto_typography(auto_link($lead['notes'],'url'))?>
 	</div>
 	<?php endif; ?>
-	<button id="btnAddNote<?=$lead['ldid']?>" class="floatr btnAddNote">Add Note to <?=$lead['companyName']?></button>
+	<button id="btnAddNote<?=$lead['ldid']?>" class="floatr btnAddNote">Add Note to Lead</button>
 	<p>
-		<strong>Submitted:</strong> <?=date_user(strtotime($lead['tsCreated']))?> by <?=profile_link($lead['eidCreated'])?>
+		<strong>Submitted:</strong> <?=date_user($lead['event']->timestamp)?> by <?=profile_link($lead['event']->pid)?>
 	</p>
 	
 	<form action="<?=$_SERVER["REQUEST_URI"]?>" method="post">
@@ -129,8 +132,8 @@
 		<tbody>
 			<?php foreach ($lead['notes_list'] as $note) : ?>
 			<tr>
-				<td><?=date_user(strtotime($note['tsCreated']))?></td>
-				<td><?=profile_link($note['eid'])?></td>
+				<td><?=date_user(strtotime($note['event']->timestamp))?></td>
+				<td><?=profile_link($note['event']->pid)?></td>
 				<td><?=auto_typography(auto_link($note['note'],'url'))?></td>
 			</tr>
 			<?php endforeach; ?>
