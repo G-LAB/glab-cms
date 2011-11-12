@@ -27,6 +27,8 @@
 |
 */
 
+$autoload['sparks'] = array('template/1.9.0');
+
 /*
 | -------------------------------------------------------------------
 |  Auto-load Packges
@@ -59,6 +61,7 @@ $autoload['packages'] = array(
 $autoload['libraries'] = array(
 						'session',
 						'database',
+						'template',
 						'ACL',
 						'users',
 						'notification',
