@@ -36,6 +36,13 @@ define('FOPEN_READ_WRITE_CREATE', 				'a+b');
 define('FOPEN_WRITE_CREATE_STRICT', 			'xb');
 define('FOPEN_READ_WRITE_CREATE_STRICT',		'x+b');
 
+/*
+|--------------------------------------------------------------------------
+| Custom Path to Sparks
+|--------------------------------------------------------------------------
+*/
+
+define('SPARKPATH',		$_SERVER['PATH_LIB'].'/codeigniter_sparks/');
 
 /* End of file constants.php */
 /* Location: ./system/application/config/constants.php */
