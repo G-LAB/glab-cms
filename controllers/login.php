@@ -7,17 +7,18 @@ class Login extends CI_Controller {
 		
 		$this->load->helper('form');
 		$this->load->library('user_agent');
+
+		$this->template
+			->set_layout('login')
+			->title('Authentication Required');
 	}
 	
 	function index()
 	{	
 		if ($this->acl->is_auth() == true) redirect('dashboard');
 		$this->session->sess_destroy();
-		$data['pageTitle'] = 'Authorized Users Only';
 		
-		$data['content']['body'] = $this->load->view('login/yubikey', null, true);
-		
-		$this->load->view('minimal',$data);
+		$this->template->build('login/yubikey');
 	}
 	
 	function destroy () {
@@ -62,15 +63,14 @@ class Login extends CI_Controller {
 		}
 		else 
 		{
-			if ($this->input->post('action')=='validate_yubikey') $data['content']['body'] = $this->load->view('login/yubikey', null, true);
-			elseif ($this->input->post('action')=='validate_login') $data['content']['body'] = $this->load->view('login/override', null, true);
+			if ($this->input->post('action')=='validate_yubikey') $data['content']['body'] = $this->template->build('login/yubikey');
+			elseif ($this->input->post('action')=='validate_login') $data['content']['body'] = $this->template->build('login/override');
 		}
 		
 		// Present Override Login Screen
-		if ($this->input->post('otp')=='override') $data['content']['body'] = $this->load->view('login/override', null, true);
+		if ($this->input->post('otp')=='override') $data['content']['body'] = $this->template->build('login/override');
 		
-		// Load in Minimal Template
-		$this->load->view('minimal',$data);
+		
 	}
 
 	function checkPassword ($password) 
