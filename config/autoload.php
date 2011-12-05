@@ -27,7 +27,7 @@
 |
 */
 
-$autoload['sparks'] = array('template/1.9.0');
+$autoload['sparks'] = array();
 
 /*
 | -------------------------------------------------------------------
@@ -40,6 +40,7 @@ $autoload['sparks'] = array('template/1.9.0');
 */
 
 $autoload['packages'] = array(
+		APPPATH.'third_party/template', 
 		APPPATH.'third_party/glab-api-kit', 
 		APPPATH.'third_party/glab-ci-ext', 
 		APPPATH.'third_party/g-lib'
@@ -110,7 +111,7 @@ $autoload['helper'] =
 |
 */
 
-$autoload['config'] = array('glab');
+$autoload['config'] = array('template');
 
 
 /*
