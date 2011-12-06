@@ -30,17 +30,10 @@ class Documents extends CI_Controller {
 		$config['per_page'] = $limit;
 		$this->pagination->initialize($config); 
 		
-		$console['header'] = 'Showing '.($offset + 1).' - '.($offset + $count_this).' of '.$count_total;
-		
-		$console['body'] = $this->load->view('documents/list', array('data'=>$docs), TRUE);
-		
-		$console['footer_lt'] = $this->pagination->create_links();
-		$console['footer_rt'] = $console['header'];
-		
-		$data['content']['body'] = $this->load->view('console', $console, true);
-		$data['content']['side'] = $this->load->view('_sidebar', null, true);
-		
-		$this->load->view('main',$data);
+		//$console['header'] = 'Showing '.($offset + 1).' - '.($offset + $count_this).' of '.$count_total;
+		//$console['footer_lt'] = $this->pagination->create_links();
+
+		$this->template->build('documents/list',array('data'=>$docs));
 		
 	}
 	
@@ -88,13 +81,13 @@ class Documents extends CI_Controller {
 	function upload() {
 		$this->load->library('upload');
 		
-		$config['upload_path'] = $this->config->item('cms_data').'documents/';
-		$config['allowed_types'] = 'pdf';
+		//$config['upload_path'] = $this->config->item('cms_data').'documents/';
+		//$config['allowed_types'] = 'pdf';
 		
-		$this->load->library('upload', $config);
+		//$this->load->library('upload', $config);
 		
 		// Alternately you can set preferences by calling the initialize function. Useful if you auto-load the class:
-		$this->upload->initialize($config);
+		//$this->upload->initialize($config);
 	}
 	
 	function mark_read ($dcid=false)
@@ -137,8 +130,7 @@ class Documents extends CI_Controller {
 				
 				if ($this->fax->send($this->input->post('tel'),$path) === true) 
 				{
-					$data['pageTitle'] = 'Sent';
-					$console['body'] = $this->load->view('documents/fax_confirm', array('tel'=>$this->input->post('tel')), TRUE);
+					$this->template->build('documents/fax_confirm', array('tel'=>$this->input->post('tel')) );
 				}
 				else 
 				{
@@ -147,13 +139,8 @@ class Documents extends CI_Controller {
 			} 
 			else 
 			{
-				$console['body'] = $this->load->view('documents/fax', array('document'=>$document), TRUE);
+				$this->template->build('documents/fax', array('document'=>$document));
 			}
-			
-			$data['content']['body'] = $this->load->view('console', $console, true);
-			$data['content']['side'] = $this->load->view('_sidebar', null, true);
-			
-			$this->load->view('main',$data);
 		}
 		else
 		{
