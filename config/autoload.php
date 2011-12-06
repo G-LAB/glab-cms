@@ -60,14 +60,14 @@ $autoload['packages'] = array(
 */
 
 $autoload['libraries'] = array(
-						'session',
+						'Init',
+						'Session',
 						'database',
-						'template',
 						'ACL',
-						'users',
-						'notification',
-						'header',
-						'twitter',
+						'Users',
+						'Notification',
+						'Header',
+						'Twitter',
 						'Yelp',
 						'HUD',
 						'User_Notice'
