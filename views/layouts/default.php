@@ -121,7 +121,7 @@
 	</header>
 
 	<nav>
-		<?php include '_menu.php'; ?>
+		<?=$template['partials']['menu']?>
 	</nav>
 		
 			
@@ -131,11 +131,11 @@
 			<?=$template['body']?>
 		</div>
 		<div class="g3">
-			<?php include '_side.php' ?>
+			<?=$template['partials']['side']?>
 		</div>
 	</section>
 	<footer>
-		<?php include '_footer.php' ?>
+		<?=$template['partials']['footer']?>
 	</footer>
 
 </body>

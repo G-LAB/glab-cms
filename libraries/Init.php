@@ -24,5 +24,9 @@ class Init
 		{
 			$CI->load->library('template',$template_config);
 		}
+
+		$CI->template->set_partial('footer','layouts/_footer');
+		$CI->template->set_partial('menu','layouts/_menu');
+		$CI->template->set_partial('side','layouts/_side');
 	}
 }
